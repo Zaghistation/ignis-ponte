@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>I'GNIS CORE — Acesso Oficial</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#080808; color:#e8e0d0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height:100vh; display:flex; flex-direction:column; justify-content:space-between; padding:24px 18px; text-align:center;
+  }
+  .brand { font-size:22px; font-weight:800; letter-spacing:3px; color:#c8860a; border-bottom:1px solid #1e1e1e; padding-bottom:14px; }
+  .box { background:#141414; border:1px solid #2a2a2a; padding:28px 20px; margin:auto 0; }
+  h1 { font-size:24px; letter-spacing:1.5px; margin-bottom:12px; color:#ffffff; }
+  p { font-size:14px; color:#b8afa0; line-height:1.6; margin-bottom:22px; }
+  .btn {
+    display:block; width:100%; background:#c8860a; color:#080808; text-decoration:none;
+    padding:18px 16px; font-weight:800; font-size:15px; letter-spacing:1px; text-transform:uppercase;
+  }
+  .hint { margin-top:18px; font-size:12px; color:#9a9082; background:#0b0b0b; border:1px dashed #2a2a2a; padding:12px; line-height:1.5; }
+  .foot { font-size:10px; color:#4a453e; letter-spacing:2px; }
+</style>
+</head>
+<body>
+  <div class="brand">I'GNIS CORE</div>
+
+  <div class="box">
+    <h1>BATEU, TIROU A FOTO, TUDO CERTO.</h1>
+    <p>Organize seus recibos, notas e comprovantes da rota sem digitar nada. Toque abaixo para abrir seu cofre privado no navegador oficial.</p>
+    <a id="btnAbrir" class="btn" href="#">🔐 ABRIR MEU COFRE NO CHROME</a>
+    <div id="webviewHint" class="hint" style="display:none;">
+      <b>Dica rápida:</b> Se o botão não abrir direto, toque nos <b>3 pontinhos (⋮ ou •••)</b> no canto superior e selecione <b>"Abrir no Chrome"</b> ou <b>"Abrir no Navegador"</b>.
+    </div>
+  </div>
+
+  <div class="foot">ZAGHISTATION // INFRAESTRUTURA NATIVA</div>
+
+<script>
+  // URL oficial de producao do WebApp I'GNIS CORE
+  const URL_WEBAPP_BASE = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv8Aph3Zsx3cqb-lQHP7qrTjdWE6xIYup20EHnH-QRglB_YT-T37EQ/exec";
+
+  (function() {
+    const qs = window.location.search || "";
+    const destino = URL_WEBAPP_BASE + qs;
+    const ua = navigator.userAgent.toLowerCase();
+    const isAndroid = ua.indexOf("android") > -1;
+    const isWebView = ua.indexOf("whatsapp") > -1 || ua.indexOf("instagram") > -1 || ua.indexOf("fban") > -1 || ua.indexOf("fbav") > -1 || ua.indexOf("; wv)") > -1;
+
+    const btn = document.getElementById("btnAbrir");
+    if (isAndroid && isWebView) {
+      const semProtocolo = destino.replace(/^https?:\/\//i, "");
+      btn.href = "intent://" + semProtocolo + "#Intent;scheme=https;package=com.android.chrome;end";
+      document.getElementById("webviewHint").style.display = "block";
+    } else {
+      btn.href = destino;
+      if (!isWebView) {
+        window.location.replace(destino);
+      } else {
+        document.getElementById("webviewHint").style.display = "block";
+      }
+    }
+  })();
+</script>
+</body>
+</html>
