@@ -3,61 +3,1182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>I'GNIS CORE — Acesso Oficial</title>
+<title>I'GNIS CORE v7.3.2</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background:#080808; color:#e8e0d0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    min-height:100vh; display:flex; flex-direction:column; justify-content:space-between; padding:26px 20px; text-align:center;
-  }
-  .brand { font-size:24px; font-weight:800; letter-spacing:3px; color:#c8860a; border-bottom:1px solid #1e1e1e; padding-bottom:14px; }
-  .box { background:#141414; border:1px solid #2a2a2a; padding:32px 22px; margin:auto 0; }
-  h1 { font-size:26px; letter-spacing:1.2px; margin-bottom:14px; color:#ffffff; line-height:1.25; }
-  p { font-size:16px; color:#d4c9b0; line-height:1.65; margin-bottom:24px; }
-  .btn {
-    display:block; width:100%; background:#c8860a; color:#080808; text-decoration:none;
-    padding:20px 16px; font-weight:800; font-size:16px; letter-spacing:1px; text-transform:uppercase;
-  }
-  .hint { margin-top:18px; font-size:13px; color:#b8afa0; background:#0b0b0b; border:1px dashed #2a2a2a; padding:14px; line-height:1.55; text-align:left; }
-  .hint b { color:#c8860a; }
-  .foot { font-size:11px; color:#5a544c; letter-spacing:2px; }
+:root {
+  --black:         #080808;
+  --surface:       #0f0f0f;
+  --panel:         #141414;
+  --border:        #1e1e1e;
+  --border-bright: #2a2a2a;
+  --amber:         #c8860a;
+  --amber-dim:     #7a5006;
+  --amber-glow:    rgba(200,134,10,0.12);
+  --green-bright:  #22a84e;
+  --text-primary:  #d4c9b0;
+  --text-secondary:#9a9082;
+  --text-dim:      #4a443b;
+  --white:         #e8e0d0;
+  --red:           #c84a4a;
+  --font-display:  'Arial Narrow', 'Impact', sans-serif;
+  --font-mono:     'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --font-sans:     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--black);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.screen {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px 16px 26px 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  gap: 8px;
+}
+
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: 2px; color: var(--amber); }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.badge-pill {
+  background: var(--amber-glow); color: var(--amber); border: 1px solid var(--amber-dim);
+  padding: 4px 9px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px;
+}
+.lang-btn {
+  background: var(--panel); border: 1px solid var(--border-bright); color: var(--text-secondary);
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700; padding: 4px 8px; cursor: pointer;
+}
+
+.card-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 24px 18px;
+  text-align: center;
+  margin: auto 0;
+  width: 100%;
+}
+
+.card-box h1 { font-family: var(--font-display); font-weight: 800; font-size: 32px; letter-spacing: 2px; color: var(--white); margin-bottom: 8px; text-transform: uppercase; }
+.card-box p { color: var(--text-secondary); font-size: 13px; margin-bottom: 18px; line-height: 1.5; }
+
+.input-field {
+  width: 100%; background: var(--black); border: 1px solid var(--border-bright);
+  color: var(--white); font-family: var(--font-mono); font-size: 14px;
+  padding: 14px; margin-bottom: 12px; text-align: center; outline: none;
+}
+.input-field:focus { border-color: var(--amber); }
+
+.lgpd-box {
+  display: flex; align-items: flex-start; gap: 10px; text-align: left;
+  background: var(--black); border: 1px solid var(--border-bright);
+  padding: 11px; margin-bottom: 14px; font-size: 11px; color: var(--text-secondary); line-height: 1.4;
+}
+.lgpd-box input { margin-top: 2px; accent-color: var(--amber); width: 16px; height: 16px; flex-shrink: 0; }
+
+.btn-primary {
+  background: var(--amber); color: var(--black); border: none; width: 100%;
+  padding: 17px 14px; font-family: var(--font-mono); font-size: 13px;
+  font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+}
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-secondary {
+  background: transparent; color: var(--amber); border: 1px solid var(--amber-dim); width: 100%;
+  padding: 13px 14px; margin-top: 10px; font-family: var(--font-mono); font-size: 11px;
+  font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+}
+
+.btn-outline {
+  width: 100%; background: var(--panel); color: var(--white);
+  border: 1px solid var(--amber); padding: 15px 14px;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+}
+
+.bio-frame-wrap {
+  position: relative; width: 190px; height: 230px; margin: 0 auto 14px auto;
+  border-radius: 50% / 45%; overflow: hidden; border: 3px solid var(--amber);
+  background: var(--black); display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.bio-frame-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.bio-placeholder { font-family: var(--font-mono); font-size: 11px; color: var(--amber); padding: 18px; line-height: 1.5; }
+.bio-challenge { background: var(--black); border: 1px solid var(--amber-dim); color: var(--amber); font-family: var(--font-mono); font-size: 11px; padding: 9px; margin-bottom: 12px; }
+
+.queue-pill {
+  display: none; background: rgba(200,134,10,0.18); border: 1px solid var(--amber);
+  color: var(--amber); font-family: var(--font-mono); font-size: 11px;
+  padding: 8px 12px; margin-top: 10px; text-align: center;
+}
+
+.status { margin-top: 14px; font-family: var(--font-mono); font-size: 12px; min-height: 20px; line-height: 1.4; }
+.st-load { color: var(--amber); }
+.st-ok { color: var(--green-bright); font-weight: 600; }
+.st-warn { color: var(--amber); font-weight: 600; }
+.st-err { color: var(--red); }
+
+.mini-recibo {
+  display: none; margin-top: 14px; background: var(--black); border: 1px solid var(--border-bright);
+  padding: 13px; text-align: left; font-family: var(--font-mono);
+}
+.mr-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.mr-tag { font-size: 10px; padding: 2px 7px; border: 1px solid var(--amber-dim); color: var(--amber); }
+.mr-val { font-size: 14px; font-weight: 700; color: var(--green-bright); }
+.mr-desc { font-size: 11px; color: var(--white); margin-bottom: 10px; }
+.btn-invert {
+  width: 100%; background: var(--panel); color: var(--amber); border: 1px solid var(--amber-dim);
+  padding: 10px; font-family: var(--font-mono); font-size: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase;
+}
+
+/* PAINEL DO COFRE */
+#vault-screen { display: none; padding-bottom: 40px; }
+header.vault-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 16px; height:54px; background:rgba(8,8,8,0.97);
+  border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+}
+.btn-nav {
+  font-family:var(--font-mono); font-size:10px; letter-spacing:1px;
+  padding:7px 10px; background:transparent; color:var(--amber); border:1px solid var(--amber-dim); cursor:pointer;
+}
+.wrap { max-width:820px; margin:0 auto; padding:18px 14px; }
+
+.filter-bar {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; align-items: center;
+}
+.f-chip {
+  background: var(--panel); border: 1px solid var(--border-bright); color: var(--text-secondary);
+  font-family: var(--font-mono); font-size: 10px; padding: 6px 10px; cursor: pointer; text-transform: uppercase;
+}
+.f-chip.active { background: var(--amber-glow); border-color: var(--amber); color: var(--amber); font-weight: 700; }
+.date-range { display: flex; gap: 6px; width: 100%; margin-top: 4px; }
+.date-in {
+  flex: 1; background: var(--panel); border: 1px solid var(--border-bright); color: var(--white);
+  font-family: var(--font-mono); font-size: 11px; padding: 6px 8px;
+}
+
+.grid-cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.metric-card { background:var(--panel); border:1px solid var(--border); padding:15px 12px; }
+.m-lbl { font-family:var(--font-mono); font-size:9px; color:var(--text-secondary); letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+.m-val { font-family:var(--font-display); font-weight:800; font-size:24px; color:var(--white); letter-spacing:1px; }
+.m-val.green { color:var(--green-bright); }
+.m-val.amber { color:var(--amber); }
+
+.panel-box { background:var(--panel); border:1px solid var(--border); padding:16px 14px; margin-bottom:14px; }
+.p-title { font-family:var(--font-mono); font-size:10px; color:var(--amber); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; }
+
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+@media (max-width: 600px) { .charts-grid { grid-template-columns: 1fr; } }
+
+.export-bar { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.btn-export {
+  background:var(--surface); border:1px solid var(--amber-dim); color:var(--white);
+  padding:13px 10px; font-family:var(--font-mono); font-size:10px;
+  letter-spacing:1px; cursor:pointer; text-transform:uppercase; text-align:center;
+}
+
+.entry { display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border); gap: 8px; }
+.entry:last-child { border-bottom:none; }
+.e-name { font-family:var(--font-mono); font-size:11px; color:var(--white); }
+.e-sub { font-size:9px; color:var(--text-secondary); margin-top:3px; text-transform:uppercase; }
+.e-link { color:var(--amber); text-decoration:none; margin-left:6px; }
+.e-val { font-family:var(--font-mono); font-size:12px; color:var(--red); font-weight:600; white-space:nowrap; }
+.e-val.pos { color:var(--green-bright); }
+.e-val.zero { color:var(--text-secondary); }
+.btn-mini-inv {
+  margin-top: 5px; background: transparent; border: 1px solid var(--border-bright); color: var(--amber);
+  font-family: var(--font-mono); font-size: 9px; padding: 3px 7px; cursor: pointer; text-transform: uppercase;
+}
+
+.vinc-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-family:var(--font-mono); font-size:11px; }
+.btn-rev { background:rgba(200,74,74,0.15); border:1px solid var(--red); color:var(--red); font-size:9px; padding:4px 8px; cursor:pointer; }
+.btn-rev-bio { background:transparent; border:1px solid var(--border-bright); color:var(--text-secondary); font-family:var(--font-mono); font-size:9px; padding:5px 9px; margin-top:8px; cursor:pointer; }
 </style>
 </head>
 <body>
-  <div class="brand">I'GNIS CORE</div>
 
-  <div class="box">
-    <h1>BATEU, TIROU A FOTO, TUDO CERTO.</h1>
-    <p>Organize seus recibos, notas e comprovantes da rota sem digitar nada. Toque abaixo para abrir seu cofre privado.</p>
-    <a id="btnAbrir" class="btn" href="#">🔐 ABRIR MEU COFRE AGORA</a>
-    <div id="webviewHint" class="hint" style="display:none;">
-      <b>Dica rápida (1 passo):</b> Como você tocou no link pelo WhatsApp, toque nos <b>3 pontinhos (⋮)</b> no canto superior direito e escolha <b>"Abrir no Chrome"</b> para liberar a câmera com 100% de estabilidade.
+<script>
+// =========================================================================
+// SHIM NATIVO GITHUB PAGES -> APPS SCRIPT API JSON (ZERO IFRAME / ZERO COOKIE)
+// =========================================================================
+const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv8Aph3Zsx3cqb-lQHP7qrTjdWE6xIYup20EHnH-QRglB_YT-T37EQ/exec";
+
+(function () {
+  if (typeof window.google !== "undefined" && window.google.script && window.google.script.run) return;
+  function runner(ok, fail) {
+    return new Proxy({}, {
+      get: function (_, nome) {
+        if (nome === "withSuccessHandler") return function (f) { return runner(f, fail); };
+        if (nome === "withFailureHandler") return function (f) { return runner(ok, f); };
+        return function () {
+          var args = Array.prototype.slice.call(arguments);
+          fetch(IGNIS_API_URL, {
+            method: "POST",
+            credentials: "omit",
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ fn: nome, args: args })
+          })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (j && j.ok) { if (ok) ok(j.data); }
+            else { if (fail) fail({ message: (j && j.erro) ? j.erro : "Erro no servidor." }); }
+          })
+          .catch(function (e) {
+            if (fail) fail({ message: "Falha de conexao: " + (e && e.message ? e.message : e) });
+          });
+        };
+      }
+    });
+  }
+  window.google = { script: { run: runner(null, null) } };
+})();
+
+const URL_PARAMS = new URLSearchParams(window.location.search);
+const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
+</script>
+
+<div class="screen" id="wrapper-main">
+
+  <!-- TELA CONVITE -->
+  <div id="invite-screen" style="display:none; flex-direction:column; justify-content:space-between; flex:1;">
+    <div class="top-bar">
+      <div class="brand">I'GNIS CORE</div>
+      <div class="top-actions">
+        <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
+        <div class="badge-pill">v7.3.2</div>
+      </div>
+    </div>
+    <div class="card-box">
+      <h1 data-i18n="inv_title">INTELIGÊNCIA PATRIMONIAL</h1>
+      <p data-i18n="inv_desc">Organize sua vida financeira e profissional sem digitar uma linha. Fotografe recibos, notas ou discos VDO e deixe o núcleo auditar tudo em segundos.</p>
+      <button class="btn-primary" onclick="entrarDoConvite()" data-i18n="inv_btn">🔐 ATIVAR MEU COFRE AGORA</button>
+    </div>
+    <div style="text-align:center;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;">
+      ZAGHISTATION // INFRAESTRUTURA SOBERANA
     </div>
   </div>
 
-  <div class="foot">ZAGHISTATION // CNPJ 55.917.683/0001-38</div>
+  <!-- TELA 0: ACESSO AO COFRE -->
+  <div id="auth-screen" style="display:none; flex-direction:column; justify-content:space-between; flex:1;">
+    <div class="top-bar">
+      <div class="brand">I'GNIS CORE</div>
+      <div class="top-actions">
+        <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
+        <div class="badge-pill">SHA-256 VAULT</div>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h1 data-i18n="auth_title">ACESSO AO NÚCLEO</h1>
+      <p data-i18n="auth_desc">Abra seu cofre individual. Seus comprovantes ficam isolados sob assinatura criptográfica própria e governança LGPD.</p>
+
+      <input type="text" id="inputTitular" class="input-field" placeholder="SEU NOME COMPLETO OU APELIDO">
+      <input type="tel" id="inputChave" class="input-field" placeholder="CHAVE PESSOAL (MIN. 6 CARACTERES)">
+
+      <label class="lgpd-box">
+        <input type="checkbox" id="chkLgpd" checked>
+        <span data-i18n="lgpd_txt">Concordo com o processamento criptográfico privado dos meus comprovantes (LGPD). Para verificação de titularidade, a selfie é processada via IA e descartada imediatamente sem retenção.</span>
+      </label>
+
+      <button class="btn-primary" id="btnAuth" onclick="ativarCofre()" data-i18n="auth_btn">🔐 ABRIR MEU COFRE</button>
+      <div id="authStatus" class="status"></div>
+    </div>
+
+    <div style="text-align:center;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;">
+      I'GNIS CORE // ISOLAMENTO DE DADOS ATIVO
+    </div>
+  </div>
+
+  <!-- TELA 0.5: VERIFICAÇÃO DE TITULARIDADE (DESCARTE LGPD 0D) -->
+  <div id="bio-screen" style="display:none; flex-direction:column; justify-content:space-between; flex:1;">
+    <div class="top-bar">
+      <div class="brand">I'GNIS CORE</div>
+      <div class="badge-pill">LGPD 0-DIAS</div>
+    </div>
+
+    <div class="card-box">
+      <h1 data-i18n="bio_title">VERIFICAÇÃO DO TITULAR</h1>
+      <p data-i18n="bio_desc">Tire uma selfie rápida para emitir o selo do seu cofre. A imagem é analisada pela IA e descartada imediatamente.</p>
+
+      <div class="bio-frame-wrap" onclick="document.getElementById('bioSelfieInput').click()">
+        <img id="bioPreviewImg" alt="Selfie">
+        <div class="bio-placeholder" id="bioPlaceholder">📷<br><br>TOQUE PARA CAPTURAR SUA SELFIE</div>
+      </div>
+
+      <div class="bio-challenge" id="bioChallengeText">👁️ OLHOS ABERTOS, ROSTO ILUMINADO E SEM ÓCULOS ESCUROS</div>
+      <input type="file" id="bioSelfieInput" accept="image/*" capture="user" style="display:none;">
+
+      <button class="btn-primary" id="btnAbrirCameraBio" onclick="document.getElementById('bioSelfieInput').click()" data-i18n="bio_btn">
+        🤳 TIRAR SELFIE E SELAR COFRE
+      </button>
+      <button class="btn-secondary" onclick="pularBiometriaPorEnquanto()" data-i18n="bio_skip">
+        CONTINUAR SEM SELO POR ENQUANTO →
+      </button>
+      <div id="bioStatus" class="status"></div>
+    </div>
+
+    <div style="text-align:center;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;">
+      MINIMIZAÇÃO LGPD // ZERO RETENÇÃO DE IMAGEM
+    </div>
+  </div>
+
+  <!-- TELA 1: CAPTURA UNIVERSAL -->
+  <div id="capture-screen" style="display:none; flex-direction:column; justify-content:space-between; flex:1;">
+    <div>
+      <div class="top-bar">
+        <div class="brand">I'GNIS CORE</div>
+        <div class="top-actions">
+          <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
+          <div class="badge-pill" id="badgeVaultId">VAULT</div>
+        </div>
+      </div>
+      <div id="queue-pill" class="queue-pill"></div>
+    </div>
+
+    <div class="card-box">
+      <h1 data-i18n="cap_title">NÚCLEO ATIVO</h1>
+      <p data-i18n="cap_desc">Recibos (Brasil ou Internacional), notas fiscais, discos VDO ou etiquetas de carga. Fotografe ou envie em lote.</p>
+
+      <input type="text" id="notaInput" class="input-field" placeholder="OBSERVAÇÃO RÁPIDA (OPCIONAL)">
+      <input type="file" id="fileInput" accept="image/*,application/pdf" capture="environment" style="display:none;">
+      <input type="file" id="batchInput" accept="image/*,application/pdf" multiple style="display:none;">
+
+      <button class="btn-primary" onclick="document.getElementById('fileInput').click()" data-i18n="cap_btn1">
+        📸 DIGITALIZAR DOCUMENTO
+      </button>
+
+      <button class="btn-secondary" onclick="document.getElementById('batchInput').click()" data-i18n="cap_btn2">
+        ⚡ ENVIO EM LOTE (MÚLTIPLOS ARQUIVOS)
+      </button>
+
+      <div id="status" class="status"></div>
+
+      <div id="miniRecibo" class="mini-recibo">
+        <div class="mr-top">
+          <span class="mr-tag" id="mrEsfera">PESSOAL</span>
+          <span class="mr-val" id="mrValor">R$ 0,00</span>
+        </div>
+        <div class="mr-desc" id="mrDesc">—</div>
+        <button class="btn-invert" id="btnInverter" onclick="inverterUltimoRecibo()">🔄 MUDAR PARA PROFISSIONAL</button>
+      </div>
+    </div>
+
+    <div>
+      <button class="btn-outline" id="btnAbrirCofre" onclick="abrirPainelCofre()" data-i18n="cap_vault">
+        🔐 ABRIR MEU COFRE
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TELA 2: PAINEL INDIVIDUAL DO TITULAR -->
+<div id="vault-screen">
+  <header class="vault-head">
+    <div class="brand" style="font-size:19px;">I'GNIS CORE</div>
+    <div style="display:flex;gap:6px;">
+      <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
+      <button class="btn-nav" onclick="voltarCaptura()" data-i18n="nav_back">← CAPTURA</button>
+      <button class="btn-nav" style="color:var(--text-secondary);border-color:var(--border-bright);" onclick="sairCofre(true)" data-i18n="nav_exit">SAIR</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="panel-box" style="text-align:center;">
+      <div class="m-lbl" id="v-titular">TITULAR</div>
+      <div class="m-val amber" style="font-size:44px;line-height:1.05;" id="v-indice">—</div>
+      <div class="badge-pill" style="display:inline-block;margin-top:4px;" id="v-nivel">NÍVEL DE ORGANIZAÇÃO</div>
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--green-bright);margin-top:8px;" id="v-bio-badge">🛡️ SELO: —</div>
+      <div>
+        <button class="btn-rev-bio" id="btnRevogarSelo" onclick="revogarSeloTitular()">REVOGAR SELO LGPD</button>
+      </div>
+    </div>
+
+    <!-- FILTRO DE PERÍODO -->
+    <div class="filter-bar">
+      <button class="f-chip active" data-range="ALL" onclick="setFiltroPeriodo('ALL', this)">Tudo</button>
+      <button class="f-chip" data-range="TODAY" onclick="setFiltroPeriodo('TODAY', this)">Hoje</button>
+      <button class="f-chip" data-range="7D" onclick="setFiltroPeriodo('7D', this)">7 Dias</button>
+      <button class="f-chip" data-range="15D" onclick="setFiltroPeriodo('15D', this)">Quinzena</button>
+      <button class="f-chip" data-range="MONTH" onclick="setFiltroPeriodo('MONTH', this)">Mês</button>
+      <div class="date-range">
+        <input type="date" id="dtIni" class="date-in" onchange="aplicarFiltroDatas()">
+        <input type="date" id="dtFim" class="date-in" onchange="aplicarFiltroDatas()">
+      </div>
+    </div>
+
+    <div class="grid-cards">
+      <div class="metric-card">
+        <div class="m-lbl" data-i18n="m_res_pro">Resultado Profissional</div>
+        <div class="m-val green" id="v-saldo-pro">R$ 0,00</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-lbl" data-i18n="m_desp_pes">Caixa Pessoal / Casa</div>
+        <div class="m-val" id="v-desp-pes">R$ 0,00</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-lbl" data-i18n="m_ent_pro">Entradas Profissionais</div>
+        <div class="m-val" id="v-rec-pro">R$ 0,00</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-lbl" data-i18n="m_sai_pro">Saídas Profissionais</div>
+        <div class="m-val" id="v-desp-pro">R$ 0,00</div>
+      </div>
+    </div>
+
+    <!-- GRÁFICOS SVG LEVES (< 3KB) -->
+    <div class="charts-grid">
+      <div class="panel-box" style="margin-bottom:0;">
+        <div class="p-title">Fluxo Profissional (Cascata)</div>
+        <div id="chartWaterfall"></div>
+      </div>
+      <div class="panel-box" style="margin-bottom:0;">
+        <div class="p-title">Distribuição por Esfera</div>
+        <div id="chartDonut"></div>
+      </div>
+    </div>
+
+    <div class="export-bar" style="margin-top:14px;">
+      <button class="btn-export" id="btnPdfExtrato" onclick="gerarPdf('EXTRATO')">📄 EXTRATO PDF</button>
+      <button class="btn-export" id="btnPdfCert" onclick="gerarPdf('CERTIFICADO')">🛡️ RELATÓRIO OFICIAL</button>
+    </div>
+
+    <!-- CHAVE MULTI-VÍNCULO (MURALHA CHINESA) -->
+    <div class="panel-box">
+      <div class="p-title">Conexão Institucional (Muralha Chinesa)</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <input type="text" id="inputConviteEmp" class="input-field" style="margin-bottom:0;padding:10px;font-size:12px;" placeholder="CÓDIGO CONVITE (EX: ZAGHI2026)">
+        <select id="selectDiasJanela" class="input-field" style="width:92px;margin-bottom:0;padding:10px 4px;font-size:11px;">
+          <option value="7">7 dias</option>
+          <option value="15">15 dias</option>
+          <option value="30" selected>30 dias</option>
+          <option value="60">60 dias</option>
+          <option value="90">90 dias</option>
+        </select>
+      </div>
+      <label class="lgpd-box" style="margin-bottom:10px;padding:8px;">
+        <input type="checkbox" id="chkExibirNomeEmp" checked>
+        <span>Autorizo exibir meu nome operacional na janela ativa (se desmarcado, exibe apenas pseudônimo DRV).</span>
+      </label>
+      <button class="btn-primary" style="padding:11px;font-size:11px;margin-bottom:10px;" onclick="conectarEmpresa()">CONECTAR CHAVE INSTITUCIONAL</button>
+      <div id="listaVinculos"></div>
+    </div>
+
+    <div class="panel-box">
+      <div class="p-title"><span data-i18n="lbl_docs">Comprovantes Guardados</span> (<span id="v-total-docs">0</span>)</div>
+      <div id="v-lista"></div>
+    </div>
+  </div>
+</div>
 
 <script>
-  const URL_WEBAPP_BASE = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv8Aph3Zsx3cqb-lQHP7qrTjdWE6xIYup20EHnH-QRglB_YT-T37EQ/exec";
+let lang = localStorage.getItem('ignis_lang') || 'PT';
+let ultimoReciboAtivo = null;
+let pendenteBioTicket = null;
+let pendenteBioTitular = null;
+let dadosCofreCache = null;
+let filtroAtual = 'ALL';
+let vinculoAtivoId = '';
 
-  (function() {
-    const qs = window.location.search || "";
-    const destino = URL_WEBAPP_BASE + qs;
-    const ua = navigator.userAgent.toLowerCase();
-    const isAndroid = ua.indexOf("android") > -1;
-    const isWebView = ua.indexOf("whatsapp") > -1 ||
-                      ua.indexOf("instagram") > -1 ||
-                      ua.indexOf("fban") > -1 ||
-                      ua.indexOf("fbav") > -1 ||
-                      ua.indexOf("; wv)") > -1;
+const I18N = {
+  PT: {
+    inv_title: 'INTELIGÊNCIA PATRIMONIAL',
+    inv_desc: 'Organize sua vida financeira e profissional sem digitar uma linha. Fotografe recibos, notas ou discos VDO e deixe o núcleo auditar tudo em segundos.',
+    inv_btn: '🔐 ATIVAR MEU COFRE AGORA',
+    auth_title: 'ACESSO AO NÚCLEO',
+    auth_desc: 'Abra seu cofre individual. Seus comprovantes ficam isolados sob assinatura criptográfica própria e governança LGPD.',
+    lgpd_txt: 'Concordo com o processamento criptográfico privado dos meus comprovantes (LGPD). Para verificação de titularidade, a selfie é processada via IA e descartada imediatamente sem retenção.',
+    auth_btn: '🔐 ABRIR MEU COFRE',
+    bio_title: 'VERIFICAÇÃO DO TITULAR',
+    bio_desc: 'Tire uma selfie rápida para emitir o selo do seu cofre. A imagem é analisada pela IA e descartada imediatamente.',
+    bio_btn: '🤳 TIRAR SELFIE E SELAR COFRE',
+    bio_skip: 'CONTINUAR SEM SELO POR ENQUANTO →',
+    cap_title: 'NÚCLEO ATIVO',
+    cap_desc: 'Recibos (Brasil ou Internacional), notas fiscais, discos VDO ou etiquetas de carga. Fotografe ou envie em lote.',
+    cap_btn1: '📸 DIGITALIZAR DOCUMENTO',
+    cap_btn2: '⚡ ENVIO EM LOTE (MÚLTIPLOS ARQUIVOS)',
+    cap_vault: '🔐 ABRIR MEU COFRE',
+    nav_back: '← CAPTURA',
+    nav_exit: 'SAIR',
+    m_res_pro: 'Resultado Profissional',
+    m_desp_pes: 'Caixa Pessoal / Casa',
+    m_ent_pro: 'Entradas Profissionais',
+    m_sai_pro: 'Saídas Profissionais',
+    lbl_docs: 'Comprovantes Guardados'
+  },
+  ES: {
+    inv_title: 'INTELIGENCIA PATRIMONIAL',
+    inv_desc: 'Organice su vida financiera y profesional sin escribir una línea. Fotografíe recibos, facturas o discos VDO y deje que el núcleo audite todo en segundos.',
+    inv_btn: '🔐 ACTIVAR MI BÓVEDA AHORA',
+    auth_title: 'ACCESO AL NÚCLEO',
+    auth_desc: 'Abra su bóveda individual. Sus comprobantes quedan aislados bajo firma criptográfica propia y gobernanza LGPD.',
+    lgpd_txt: 'Acepto el procesamiento criptográfico privado de mis comprobantes (LGPD). La selfie se analiza por IA y se descarta inmediatamente sin retención.',
+    auth_btn: '🔐 ABRIR MI BÓVEDA',
+    bio_title: 'VERIFICACIÓN DEL TITULAR',
+    bio_desc: 'Tome una selfie rápida para emitir el sello de su bóveda. La imagen se analiza por IA y se descarta inmediatamente.',
+    bio_btn: '🤳 TOMAR SELFIE Y SELLAR BÓVEDA',
+    bio_skip: 'CONTINUAR SIN SELLO POR AHORA →',
+    cap_title: 'NÚCLEO ACTIVO',
+    cap_desc: 'Recibos (Brasil o Internacional), facturas, discos VDO o etiquetas de carga. Fotografíe o envíe por lotes.',
+    cap_btn1: '📸 DIGITALIZAR DOCUMENTO',
+    cap_btn2: '⚡ ENVÍO POR LOTES (MÚLTIPLES ARCHIVOS)',
+    cap_vault: '🔐 ABRIR MI BÓVEDA',
+    nav_back: '← CAPTURA',
+    nav_exit: 'SALIR',
+    m_res_pro: 'Resultado Profesional',
+    m_desp_pes: 'Caja Personal / Hogar',
+    m_ent_pro: 'Ingresos Profesionales',
+    m_sai_pro: 'Gastos Profesionales',
+    lbl_docs: 'Comprobantes Guardados'
+  }
+};
 
-    const btn = document.getElementById("btnAbrir");
-    btn.href = destino;
+function esc(s) {
+  return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+  });
+}
 
-    if (isWebView || isAndroid) {
-      document.getElementById("webviewHint").style.display = "block";
+function toggleLang() {
+  lang = lang === 'PT' ? 'ES' : 'PT';
+  localStorage.setItem('ignis_lang', lang);
+  applyLang();
+}
+
+function applyLang() {
+  const dict = I18N[lang] || I18N.PT;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (dict[k]) el.textContent = dict[k];
+  });
+  document.querySelectorAll('.l-pt').forEach(el => el.style.color = lang === 'PT' ? 'var(--amber)' : 'var(--text-secondary)');
+  document.querySelectorAll('.l-es').forEach(el => el.style.color = lang === 'ES' ? 'var(--amber)' : 'var(--text-secondary)');
+}
+
+function formatarErroServidor(err) {
+  if (!err) return 'Erro de comunicação com o servidor';
+  if (typeof err === 'string') return err;
+  if (err.message) return err.message;
+  return 'Falha inesperada';
+}
+
+function tratarErroSessao(err) {
+  const msg = formatarErroServidor(err);
+  if (msg.indexOf('SESSAO_EXPIRADA') > -1) {
+    limparSessaoLocal();
+    iniciarTela(true);
+    alert('Sessão encerrada ou expirada. Entre novamente no seu cofre.');
+  } else {
+    alert(msg);
+  }
+}
+
+function getSessaoCofre() {
+  return {
+    ticket: localStorage.getItem('ignis_vault_ticket'),
+    titular: localStorage.getItem('ignis_titular'),
+    bioHash: localStorage.getItem('ignis_bio_hash')
+  };
+}
+
+function limparSessaoLocal() {
+  ['ignis_vault_ticket', 'ignis_titular', 'ignis_bio_hash'].forEach(k => localStorage.removeItem(k));
+  ultimoReciboAtivo = null;
+  vinculoAtivoId = '';
+  document.getElementById('miniRecibo').style.display = 'none';
+}
+
+function entrarDoConvite() {
+  document.getElementById('invite-screen').style.display = 'none';
+  iniciarTela(true);
+}
+
+function ativarCofre() {
+  const nome = document.getElementById('inputTitular').value.trim();
+  const chave = document.getElementById('inputChave').value.trim();
+  const lgpd = document.getElementById('chkLgpd').checked;
+  const authSt = document.getElementById('authStatus');
+
+  if (!nome || chave.length < 6) {
+    authSt.className = 'status st-err';
+    authSt.textContent = 'Informe seu nome e uma chave pessoal com no mínimo 6 caracteres.';
+    return;
+  }
+  if (!lgpd) {
+    authSt.className = 'status st-err';
+    authSt.textContent = 'Marque o aceite do termo LGPD para continuar.';
+    return;
+  }
+
+  const btn = document.getElementById('btnAuth');
+  btn.disabled = true;
+  btn.textContent = '🔐 CONECTANDO AO NÚCLEO...';
+  authSt.className = 'status st-load';
+  authSt.textContent = 'Autenticando cofre...';
+
+  google.script.run
+    .withSuccessHandler((res) => {
+      btn.disabled = false;
+      applyLang();
+      authSt.textContent = '';
+
+      if (!res || !res.sucesso || !res.vaultId) {
+        authSt.className = 'status st-err';
+        authSt.textContent = 'Falha na resposta do servidor.';
+        return;
+      }
+
+      if (res.biometriaAtiva && res.bioHash) {
+        localStorage.setItem('ignis_vault_ticket', res.vaultId);
+        localStorage.setItem('ignis_titular', res.titular);
+        localStorage.setItem('ignis_bio_hash', res.bioHash);
+        iniciarTela(true);
+        sincronizarVinculoAtivoSilencioso();
+      } else {
+        pendenteBioTicket = res.vaultId;
+        pendenteBioTitular = res.titular;
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('bio-screen').style.display = 'flex';
+      }
+    })
+    .withFailureHandler((err) => {
+      btn.disabled = false;
+      applyLang();
+      authSt.className = 'status st-err';
+      authSt.textContent = '❌ ' + formatarErroServidor(err);
+    })
+    .autenticarCofre(nome, chave, window.location.search || '', true);
+}
+
+function pularBiometriaPorEnquanto() {
+  if (pendenteBioTicket) {
+    localStorage.setItem('ignis_vault_ticket', pendenteBioTicket);
+    localStorage.setItem('ignis_titular', pendenteBioTitular);
+    localStorage.setItem('ignis_bio_hash', 'PENDENTE');
+    iniciarTela(true);
+    sincronizarVinculoAtivoSilencioso();
+  }
+}
+
+document.getElementById('bioSelfieInput').addEventListener('change', async (e) => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if (!f || f.size === 0) return;
+
+  const btn = document.getElementById('btnAbrirCameraBio');
+  const bioStatus = document.getElementById('bioStatus');
+  btn.disabled = true;
+  bioStatus.className = 'status st-load';
+  bioStatus.textContent = '🔍 Validando titularidade (descarte imediato após leitura)...';
+
+  try {
+    const b64 = await compressImage(f, 640, 0.80);
+    const imgPreview = document.getElementById('bioPreviewImg');
+    imgPreview.src = 'data:image/jpeg;base64,' + b64;
+    imgPreview.style.display = 'block';
+    document.getElementById('bioPlaceholder').style.display = 'none';
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        localStorage.setItem('ignis_vault_ticket', pendenteBioTicket);
+        localStorage.setItem('ignis_titular', pendenteBioTitular);
+        localStorage.setItem('ignis_bio_hash', res.bioHash);
+        btn.disabled = false;
+        iniciarTela(true);
+        sincronizarVinculoAtivoSilencioso();
+      })
+      .withFailureHandler((err) => {
+        btn.disabled = false;
+        bioStatus.className = 'status st-err';
+        bioStatus.textContent = '❌ ' + formatarErroServidor(err);
+      })
+      .validarProvaDeVidaBiometrica(pendenteBioTicket, pendenteBioTitular, b64, 'Olhos abertos e rosto iluminado');
+  } catch (err) {
+    btn.disabled = false;
+    bioStatus.className = 'status st-err';
+    bioStatus.textContent = '❌ ' + formatarErroServidor(err);
+  }
+});
+
+function revogarSeloTitular() {
+  if (!confirm('Revogar seu selo LGPD agora? Isso encerrará a sessão atual por segurança.')) return;
+  const sessao = getSessaoCofre();
+  google.script.run
+    .withSuccessHandler(() => {
+      limparSessaoLocal();
+      iniciarTela(true);
+      alert('Selo revogado com sucesso.');
+    })
+    .withFailureHandler(tratarErroSessao)
+    .revogarBiometriaCofre(sessao.ticket);
+}
+
+function sairCofre(pedirConfirmacao) {
+  if (pedirConfirmacao && !confirm('Deseja sair deste cofre?')) return;
+  limparSessaoLocal();
+  iniciarTela(true);
+}
+
+function iniciarTela(ignorarConvite) {
+  const sessao = getSessaoCofre();
+  document.getElementById('wrapper-main').style.display = 'flex';
+  document.getElementById('invite-screen').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('bio-screen').style.display = 'none';
+  document.getElementById('capture-screen').style.display = 'none';
+  document.getElementById('vault-screen').style.display = 'none';
+
+  if (!ignorarConvite && MODO_APP === 'convite' && !sessao.ticket) {
+    document.getElementById('invite-screen').style.display = 'flex';
+    return;
+  }
+
+  if (!sessao.ticket) {
+    document.getElementById('auth-screen').style.display = 'flex';
+  } else {
+    document.getElementById('badgeVaultId').textContent = (sessao.titular || 'COFRE').substring(0, 16);
+    document.getElementById('capture-screen').style.display = 'flex';
+  }
+}
+
+function sincronizarVinculoAtivoSilencioso() {
+  const sessao = getSessaoCofre();
+  if (!sessao.ticket) return;
+  google.script.run
+    .withSuccessHandler(lista => {
+      const ativo = (lista || []).find(v => v.status === 'ATIVO');
+      vinculoAtivoId = ativo ? ativo.entidadeId : '';
+    })
+    .withFailureHandler(() => {})
+    .listarVinculosCofre(sessao.ticket);
+}
+
+// =========================================================
+// FILA DE UPLOAD & MINI-RECIBO
+// =========================================================
+const fileInput = document.getElementById('fileInput');
+const batchInput = document.getElementById('batchInput');
+const notaInput = document.getElementById('notaInput');
+const statusDiv = document.getElementById('status');
+const queuePill = document.getElementById('queue-pill');
+
+let filaEnvio = [];
+let processandoFila = false;
+let concluidosSessao = 0;
+
+function atualizarBadgeFila() {
+  if (filaEnvio.length > 0 || processandoFila) {
+    const qtd = filaEnvio.length + (processandoFila ? 1 : 0);
+    queuePill.style.display = 'block';
+    queuePill.textContent = '⏳ AUDITANDO NO NÚCLEO: ' + qtd + ' NA FILA';
+  } else {
+    queuePill.style.display = 'none';
+  }
+}
+
+async function enfileirarArquivos(fileList) {
+  const validos = fileList.filter(f => f && f.size > 0);
+  if (validos.length === 0) return;
+  const sessao = getSessaoCofre();
+  if (!sessao.ticket) { iniciarTela(true); return; }
+
+  const nota = notaInput.value || '';
+  notaInput.value = '';
+  statusDiv.className = 'status st-load';
+  statusDiv.textContent = '⚡ Preparando ' + validos.length + ' arquivo(s)...';
+
+  for (let i = 0; i < validos.length; i++) {
+    const file = validos[i];
+    const nome = file.name || ('doc_' + Date.now() + '_' + i + '.jpg');
+    const isPdf = String(file.type || '').toLowerCase() === 'application/pdf' || nome.toLowerCase().endsWith('.pdf');
+    try {
+      const b64 = isPdf ? await readFileAsBase64(file) : await compressImage(file, 1280, 0.74);
+      filaEnvio.push({ base64: b64, nome: nome, mime: isPdf ? 'application/pdf' : 'image/jpeg', nota: nota, ticket: sessao.ticket, titular: sessao.titular });
+      atualizarBadgeFila();
+      processarProximoDaFila();
+    } catch (err) {
+      statusDiv.className = 'status st-err';
+      statusDiv.textContent = '❌ Erro local: ' + formatarErroServidor(err);
     }
-  })();
+  }
+}
+
+fileInput.addEventListener('change', (e) => { const f = Array.from(e.target.files); fileInput.value = ''; enfileirarArquivos(f); });
+batchInput.addEventListener('change', (e) => { const f = Array.from(e.target.files); batchInput.value = ''; enfileirarArquivos(f); });
+
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result.split(',')[1]);
+    r.onerror = () => reject(new Error('Falha ao ler arquivo'));
+    r.readAsDataURL(file);
+  });
+}
+
+function compressImage(file, maxWidth, quality) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > maxWidth) { h = Math.round((h * maxWidth) / w); w = maxWidth; }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', quality).split(',')[1]);
+      };
+      img.onerror = () => reject(new Error('Imagem inválida'));
+      img.src = ev.target.result;
+    };
+    r.onerror = () => reject(new Error('Falha ao ler imagem'));
+    r.readAsDataURL(file);
+  });
+}
+
+function exibirMiniRecibo(rec) {
+  ultimoReciboAtivo = rec;
+  document.getElementById('miniRecibo').style.display = 'block';
+  const isVisual = rec.categoria === 'REGISTRO_GERAL';
+  document.getElementById('mrEsfera').textContent = rec.esfera + ' · ' + (isVisual ? 'LASTRO VISUAL' : rec.categoria);
+  document.getElementById('mrValor').textContent = isVisual
+    ? 'R$ 0,00'
+    : ((rec.isReceita ? '+R$ ' : 'R$ ') + Number(rec.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits:2}));
+  document.getElementById('mrDesc').textContent = rec.emissor;
+  const btnInv = document.getElementById('btnInverter');
+  btnInv.disabled = false;
+  btnInv.textContent = rec.esfera === 'PESSOAL' ? '🔄 MUDAR PARA PROFISSIONAL' : '🔄 MUDAR PARA PESSOAL';
+}
+
+function inverterUltimoRecibo() {
+  if (!ultimoReciboAtivo) return;
+  const sessao = getSessaoCofre();
+  const btn = document.getElementById('btnInverter');
+  btn.disabled = true;
+  btn.textContent = '⏳ MOVENDO...';
+
+  google.script.run
+    .withSuccessHandler((res) => {
+      ultimoReciboAtivo.id = res.novoId;
+      ultimoReciboAtivo.esfera = res.novaEsfera;
+      document.getElementById('mrEsfera').textContent = res.novaEsfera + ' · ' + ultimoReciboAtivo.categoria;
+      btn.disabled = false;
+      btn.textContent = res.novaEsfera === 'PESSOAL' ? '✅ EM PESSOAL (MUDAR P/ PROFISSIONAL)' : '✅ EM PROFISSIONAL (MUDAR P/ PESSOAL)';
+    })
+    .withFailureHandler((err) => {
+      btn.disabled = false;
+      tratarErroSessao(err);
+    })
+    .inverterEsferaRegistro(ultimoReciboAtivo.id, ultimoReciboAtivo.esfera, sessao.ticket);
+}
+
+function processarProximoDaFila() {
+  if (processandoFila || filaEnvio.length === 0) { atualizarBadgeFila(); return; }
+  processandoFila = true;
+  const pct = filaEnvio.shift();
+  atualizarBadgeFila();
+
+  google.script.run
+    .withSuccessHandler((res) => {
+      processandoFila = false;
+      const gravados = (res && res.itensProcessados) || 0;
+      concluidosSessao += gravados;
+      if (gravados > 0) {
+        statusDiv.className = 'status st-ok';
+        statusDiv.textContent = '✅ Auditado (' + (res.tempoSegundos || '?') + 's). Sessão: ' + concluidosSessao;
+        if (res.recibos && res.recibos.length > 0) exibirMiniRecibo(res.recibos[res.recibos.length - 1]);
+      } else if (res && res.duplicados > 0) {
+        statusDiv.className = 'status st-warn';
+        statusDiv.textContent = '⚠️ Documento já registrado anteriormente.';
+      }
+      atualizarBadgeFila();
+      processarProximoDaFila();
+    })
+    .withFailureHandler((err) => {
+      processandoFila = false;
+      const msg = formatarErroServidor(err);
+      if (msg.indexOf('SESSAO_EXPIRADA') > -1) {
+        filaEnvio = [];
+        atualizarBadgeFila();
+        tratarErroSessao(err);
+        return;
+      }
+      statusDiv.className = 'status st-err';
+      statusDiv.textContent = '❌ ' + msg;
+      atualizarBadgeFila();
+      processarProximoDaFila();
+    })
+    .processarUploadWeb(pct.base64, pct.nome, pct.mime, pct.nota, pct.ticket, pct.titular, vinculoAtivoId);
+}
+
+// =========================================================
+// PAINEL DO COFRE, FILTROS & GRÁFICOS SVG LEVES (XSS BLINDADO)
+// =========================================================
+function abrirPainelCofre() {
+  const sessao = getSessaoCofre();
+  const btn = document.getElementById('btnAbrirCofre');
+  btn.textContent = '⏳ ABRINDO COFRE...';
+  btn.disabled = true;
+
+  google.script.run
+    .withSuccessHandler((d) => {
+      btn.disabled = false;
+      applyLang();
+      dadosCofreCache = d;
+      document.getElementById('wrapper-main').style.display = 'none';
+      document.getElementById('vault-screen').style.display = 'block';
+      window.scrollTo(0, 0);
+
+      document.getElementById('v-titular').textContent = d.titular;
+      document.getElementById('v-indice').textContent = d.indice + ' / 1000';
+      document.getElementById('v-nivel').textContent = d.nivel + ' · NÍVEL DE ORGANIZAÇÃO';
+      document.getElementById('v-bio-badge').textContent = '🛡️ SELO TITULAR: ' + (d.bioHash || 'PENDENTE');
+
+      aplicarFiltroLocal();
+      carregarVinculos();
+    })
+    .withFailureHandler((err) => {
+      btn.disabled = false;
+      applyLang();
+      tratarErroSessao(err);
+    })
+    .compilarDadosCofre(sessao.ticket);
+}
+
+function setFiltroPeriodo(tipo, btnEl) {
+  filtroAtual = tipo;
+  document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  document.getElementById('dtIni').value = '';
+  document.getElementById('dtFim').value = '';
+  aplicarFiltroLocal();
+}
+
+function aplicarFiltroDatas() {
+  filtroAtual = 'CUSTOM';
+  document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
+  aplicarFiltroLocal();
+}
+
+function aplicarFiltroLocal() {
+  if (!dadosCofreCache) return;
+  const hoje = new Date();
+  const hojeIso = hoje.toISOString().substring(0, 10);
+  let dtMin = '';
+  let dtMax = '';
+
+  if (filtroAtual === 'TODAY') { dtMin = hojeIso; dtMax = hojeIso; }
+  else if (filtroAtual === '7D') { dtMin = new Date(hoje.getTime() - 7 * 86400000).toISOString().substring(0, 10); }
+  else if (filtroAtual === '15D') { dtMin = new Date(hoje.getTime() - 15 * 86400000).toISOString().substring(0, 10); }
+  else if (filtroAtual === 'MONTH') { dtMin = hojeIso.substring(0, 7) + '-01'; }
+  else if (filtroAtual === 'CUSTOM') {
+    dtMin = document.getElementById('dtIni').value;
+    dtMax = document.getElementById('dtFim').value;
+  }
+
+  const hist = (dadosCofreCache.historico || []).filter(item => {
+    const d = String(item.data || '');
+    if (dtMin && d && d < dtMin) return false;
+    if (dtMax && d && d > dtMax) return false;
+    return true;
+  });
+
+  let recPro = 0, despPro = 0, despPes = 0;
+  hist.forEach(h => {
+    const isZero = h.categoria === 'NOTA_CARGA_OPERACIONAL' || h.categoria === 'DOCUMENTO_PATRIMONIAL' || h.categoria === 'REGISTRO_GERAL';
+    if (isZero || String(h.statusRevisao || '').indexOf('REVISAR:') === 0) return;
+    const v = Number(h.valor || 0);
+    if (h.esfera === 'PROFISSIONAL') {
+      if (h.isReceita) recPro += v;
+      else despPro += v;
+    } else {
+      despPes += v;
+    }
+  });
+
+  const saldoPro = recPro - despPro;
+  const fmt = n => 'R$ ' + Number(n || 0).toLocaleString('pt-BR', {minimumFractionDigits:2});
+  document.getElementById('v-saldo-pro').textContent = fmt(saldoPro);
+  document.getElementById('v-desp-pes').textContent = fmt(despPes);
+  document.getElementById('v-rec-pro').textContent = fmt(recPro);
+  document.getElementById('v-desp-pro').textContent = fmt(despPro);
+  document.getElementById('v-total-docs').textContent = hist.length;
+
+  renderChartsSvg(recPro, despPro, saldoPro, despPes);
+
+  const lista = document.getElementById('v-lista');
+  if (hist.length === 0) {
+    lista.innerHTML = '<div style="color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:8px 0;">Nenhum registro neste período.</div>';
+    return;
+  }
+
+  lista.innerHTML = hist.map(item => {
+    const isVisual = item.categoria === 'REGISTRO_GERAL';
+    const isZero = isVisual || item.categoria === 'NOTA_CARGA_OPERACIONAL' || item.categoria === 'DOCUMENTO_PATRIMONIAL';
+    const valFmt = isZero ? 'R$ 0,00' : ((item.isReceita ? '+R$ ' : '-R$ ') + Number(item.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits:2}));
+    const cls = isZero ? 'e-val zero' : (item.isReceita ? 'e-val pos' : 'e-val');
+    const linkSafe = (item.link && String(item.link).indexOf('https://') === 0) ? esc(item.link) : '';
+    const linkHtml = linkSafe ? '<a class="e-link" href="' + linkSafe + '" target="_blank" rel="noopener noreferrer">[VER]</a>' : '';
+    const catLabel = isVisual ? 'LASTRO VISUAL' : esc(item.categoria);
+    const idSafe = esc(item.id);
+    const esfSafe = esc(item.esfera);
+    const btnInvHtml = '<button class="btn-mini-inv" onclick="inverterItemLista(\'' + idSafe + '\',\'' + esfSafe + '\')">' +
+      (item.esfera === 'PESSOAL' ? '→ Mudar p/ Profissional' : '→ Mudar p/ Pessoal') + '</button>';
+
+    return '<div class="entry">' +
+      '<div>' +
+        '<div class="e-name">' + esc(String(item.emissor || '').substring(0, 26)) + linkHtml + '</div>' +
+        '<div class="e-sub">' + esfSafe + ' · ' + catLabel + (item.data ? ' · ' + esc(item.data) : '') + '</div>' +
+        btnInvHtml +
+      '</div>' +
+      '<div class="' + cls + '">' + valFmt + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function inverterItemLista(idReg, esferaAtual) {
+  const sessao = getSessaoCofre();
+  google.script.run
+    .withSuccessHandler(() => abrirPainelCofre())
+    .withFailureHandler(tratarErroSessao)
+    .inverterEsferaRegistro(idReg, esferaAtual, sessao.ticket);
+}
+
+function renderChartsSvg(rec, desp, saldo, pes) {
+  const maxW = Math.max(rec, desp, Math.abs(saldo), 1);
+  const wRec = Math.round((rec / maxW) * 140);
+  const wDesp = Math.round((desp / maxW) * 140);
+  const wSal = Math.round((Math.max(0, saldo) / maxW) * 140);
+
+  document.getElementById('chartWaterfall').innerHTML =
+    '<svg viewBox="0 0 260 95" style="width:100%;height:auto;font-family:monospace;font-size:10px;">' +
+      '<text x="0" y="18" fill="#9a9082">Entradas</text><rect x="65" y="8" width="' + wRec + '" height="13" fill="#22a84e"/><text x="' + (70 + wRec) + '" y="18" fill="#e8e0d0">' + Math.round(rec) + '</text>' +
+      '<text x="0" y="48" fill="#9a9082">Saídas</text><rect x="65" y="38" width="' + wDesp + '" height="13" fill="#c84a4a"/><text x="' + (70 + wDesp) + '" y="48" fill="#e8e0d0">' + Math.round(desp) + '</text>' +
+      '<text x="0" y="78" fill="#9a9082">Líquido</text><rect x="65" y="68" width="' + wSal + '" height="13" fill="#c8860a"/><text x="' + (70 + wSal) + '" y="78" fill="#e8e0d0">' + Math.round(saldo) + '</text>' +
+    '</svg>';
+
+  const totalMov = (rec + desp + pes) || 1;
+  const pctPro = Math.round(((rec + desp) / totalMov) * 100);
+  const pctPes = 100 - pctPro;
+  const dash = Math.round((pctPro / 100) * 188);
+
+  document.getElementById('chartDonut').innerHTML =
+    '<svg viewBox="0 0 260 95" style="width:100%;height:auto;font-family:monospace;font-size:10px;">' +
+      '<circle cx="48" cy="48" r="30" fill="none" stroke="#38bdf8" stroke-width="10"/>' +
+      '<circle cx="48" cy="48" r="30" fill="none" stroke="#c8860a" stroke-width="10" stroke-dasharray="' + dash + ' 188" transform="rotate(-90 48 48)"/>' +
+      '<rect x="98" y="26" width="10" height="10" fill="#c8860a"/><text x="114" y="35" fill="#e8e0d0">Profissional: ' + pctPro + '%</text>' +
+      '<rect x="98" y="54" width="10" height="10" fill="#38bdf8"/><text x="114" y="63" fill="#e8e0d0">Pessoal: ' + pctPes + '%</text>' +
+    '</svg>';
+}
+
+function conectarEmpresa() {
+  const sessao = getSessaoCofre();
+  const cod = document.getElementById('inputConviteEmp').value.trim();
+  const dias = parseInt(document.getElementById('selectDiasJanela').value || '30', 10);
+  const autNome = document.getElementById('chkExibirNomeEmp').checked;
+  if (!cod) return;
+
+  google.script.run
+    .withSuccessHandler(res => {
+      alert('Conectado a ' + res.empresa + ' até ' + res.fechamento);
+      document.getElementById('inputConviteEmp').value = '';
+      carregarVinculos();
+    })
+    .withFailureHandler(tratarErroSessao)
+    .aceitarConviteEmpresa(sessao.ticket, cod, dias, autNome);
+}
+
+function carregarVinculos() {
+  const sessao = getSessaoCofre();
+  google.script.run
+    .withSuccessHandler(lista => {
+      const ativo = (lista || []).find(v => v.status === 'ATIVO');
+      vinculoAtivoId = ativo ? ativo.entidadeId : '';
+
+      const box = document.getElementById('listaVinculos');
+      if (!lista || lista.length === 0) {
+        box.innerHTML = '<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);">Nenhuma chave empresarial ativa.</div>';
+        return;
+      }
+      box.innerHTML = lista.map(v =>
+        '<div class="vinc-row">' +
+          '<div><strong>' + esc(v.empresa) + '</strong> (' + esc(v.status) + ')<br><span style="color:var(--text-secondary);font-size:9px;">Janela: ' + esc(v.abertura) + ' a ' + esc(v.fechamento) + '</span></div>' +
+          (v.status === 'ATIVO' ? '<button class="btn-rev" onclick="encerrarVinculo(\'' + esc(v.vinculoId) + '\')">FECHAR CHAVE</button>' : '') +
+        '</div>'
+      ).join('');
+    })
+    .withFailureHandler(tratarErroSessao)
+    .listarVinculosCofre(sessao.ticket);
+}
+
+function encerrarVinculo(vId) {
+  if (!confirm('Fechar chave imediatamente? A empresa perderá o acesso no mesmo segundo.')) return;
+  const sessao = getSessaoCofre();
+  google.script.run
+    .withSuccessHandler(() => carregarVinculos())
+    .withFailureHandler(tratarErroSessao)
+    .revogarVinculoMotorista(sessao.ticket, vId);
+}
+
+function gerarPdf(tipoDoc) {
+  const sessao = getSessaoCofre();
+  const btn = tipoDoc === 'CERTIFICADO' ? document.getElementById('btnPdfCert') : document.getElementById('btnPdfExtrato');
+  const orig = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ GERANDO...';
+
+  google.script.run
+    .withSuccessHandler((res) => {
+      btn.disabled = false;
+      btn.textContent = orig;
+      if (res && res.htmlDoc) {
+        const barra =
+          '<div class="no-print" style="background:#080808;color:#e8e0d0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;border-bottom:2px solid #c8860a;position:sticky;top:0;">' +
+          '<span style="color:#c8860a;font-weight:bold;letter-spacing:2px;">I\'GNIS CORE</span>' +
+          '<button onclick="window.print()" style="background:#c8860a;color:#080808;border:none;padding:10px 16px;font-weight:bold;font-family:monospace;cursor:pointer;">🖨️ SALVAR PDF / IMPRIMIR</button>' +
+          '</div><style>@media print { .no-print { display:none !important; } body { margin:0; } }</style>';
+        const blob = new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(res.nome || 'Relatorio') + '</title></head><body style="margin:0;">' + barra + res.htmlDoc + '</body></html>'], { type: 'text/html;charset=utf-8' });
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+      } else if (res && res.url) {
+        window.open(res.url, '_blank');
+      }
+    })
+    .withFailureHandler((err) => {
+      btn.disabled = false;
+      btn.textContent = orig;
+      tratarErroSessao(err);
+    })
+    .gerarDocumentoOficialCofre(sessao.ticket, sessao.titular, tipoDoc);
+}
+
+function voltarCaptura() {
+  document.getElementById('vault-screen').style.display = 'none';
+  document.getElementById('wrapper-main').style.display = 'flex';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  applyLang();
+  iniciarTela(false);
+  sincronizarVinculoAtivoSilencioso();
+});
 </script>
 </body>
 </html>
