@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>I'GNIS CORE v7.3.2 — Torre de Comando Institucional</title>
+  <title>I'GNIS CORE v7.3.3 — Torre de Comando Institucional</title>
   <style>
     :root {
       --bg-base: #090b0f;
@@ -398,10 +398,10 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
 
   <header class="topbar">
     <div class="brand">
-      <span class="brand-badge">I'GNIS CORE v7.3.2</span>
+      <span class="brand-badge">I'GNIS CORE v7.3.3</span>
       <span class="brand-title" id="dashBrandTitle">Torre de Comando Institucional</span>
       <button type="button" class="lang-btn" onclick="alternarIdiomaDash()">
-        <span id="dPt" style="color:var(--gold);">PT</span> | <span id="dEs">ES</span>
+        <span id="dPt" style="color:var(--gold);">PT</span> | <span id="dEs">ES</span> | <span id="dEn">EN</span>
       </button>
     </div>
     <div id="topbarControls" class="session-controls hidden">
@@ -439,7 +439,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
         </button>
       </form>
 
-      <div class="security-note">
+      <div class="security-note" id="secNote">
         DOMÍNIO SOBERANO • SESSÃO EFÊMERA • LOG DE AUDITORIA SHA-256 ATIVO
       </div>
     </section>
@@ -458,8 +458,8 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
           </div>
           <div class="entity-meta">
             <span>ID: <strong id="entIdDisplay" style="color: var(--text-main);">--</strong></span>
-            <span>Limiar VDO: <strong id="entLimiarVdo" style="color: var(--gold);">-- km/h</strong></span>
-            <span>Visão Ativa: <strong id="entVisaoModo" style="color: var(--text-main);">--</strong></span>
+            <span><span id="lblVdoLim">Limiar VDO</span>: <strong id="entLimiarVdo" style="color: var(--gold);">-- km/h</strong></span>
+            <span><span id="lblVisao">Visão Ativa</span>: <strong id="entVisaoModo" style="color: var(--text-main);">--</strong></span>
           </div>
         </div>
       </div>
@@ -467,7 +467,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       <!-- CARDS DE KPI -->
       <div id="kpiGrid" class="kpi-grid"></div>
 
-      <!-- GRÁFICOS SVG LEVES v7.3.2 (< 3KB) -->
+      <!-- GRÁFICOS SVG LEVES v7.3.3 (< 3KB) -->
       <div class="charts-grid">
         <div class="chart-card" id="cardChartFin">
           <div class="chart-title" id="titleChartFin">Comparativo Financeiro por Motorista (Receitas vs. Despesas)</div>
@@ -512,7 +512,9 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
   </main>
 
   <script>
+    var LANGS_DASH = ['PT', 'ES', 'EN'];
     var langDash = localStorage.getItem('ignis_lang') || 'PT';
+    if (LANGS_DASH.indexOf(langDash) === -1) langDash = 'PT';
 
     var estadoPainel = {
       ticket: null,
@@ -526,8 +528,167 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       documentos: []
     };
 
+    var DICT_DASH = {
+      PT: {
+        brandTitle: 'Torre de Comando Institucional',
+        loginTitle: 'Acesso Gestor Autorizado',
+        loginDesc: 'Leitura auditada via Muralha Chinesa e Ledger de Consentimento ativo.',
+        lblEntId: 'Identificador da Entidade (Entidade_ID)',
+        lblSegredo: 'Chave Secreta Institucional',
+        btnLogin: 'Autenticar na Torre',
+        secNote: 'DOMÍNIO SOBERANO • SESSÃO EFÊMERA • LOG DE AUDITORIA SHA-256 ATIVO',
+        btnRefresh: 'Atualizar',
+        btnExportPdf: 'Gerar Dossiê PDF',
+        btnLogout: 'Sair',
+        lblVdoLim: 'Limiar VDO',
+        lblVisao: 'Visão Ativa',
+        titleChartFin: 'Comparativo Financeiro por Motorista (Receitas vs. Despesas)',
+        titleChartVdo: 'Índice de Condução Defensiva (Telemetria VDO)',
+        secTitleMot: 'Vínculos Autorizados & Consolidado por Motorista',
+        secTitleDoc: 'Registros Auditados na Janela Consentida',
+        phMot: 'Filtrar motorista ou vínculo...',
+        phDoc: 'Filtrar placa, categoria, emissor ou motorista...',
+        synced: 'Sincronizado',
+        modeRisco: 'Telemetria VDO & Conformidade de Risco (Sem valores financeiros)',
+        modeTrans: 'Operacional Completo (Frota, Financeiro Mercosul/BRL & VDO)',
+        kpiMot: 'Motoristas Vinculados',
+        kpiMotSub: 'Chaves ativas sob consentimento',
+        kpiDoc: 'Documentos na Janela',
+        kpiDocSub: 'Registros auditados no período',
+        kpiVdo: 'Discos VDO Auditados',
+        kpiVdoSub: 'Limiar configurado: ',
+        kpiDef: 'Condução Defensiva VDO',
+        kpiDefSub: 'Discos dentro do limite operacional',
+        kpiDesp: 'Despesas Operacionais',
+        kpiDespSub: 'Convertido via CAMBIO_DIARIO',
+        kpiRec: 'Receitas / Fretes',
+        kpiRecSub: 'Comprovantes na janela ativa',
+        vdoConfOk: 'CONFORMIDADE ALTA',
+        vdoConfWarn: 'ATENÇÃO OPERACIONAL',
+        noChart: 'Aguardando vínculos ativos para exibir comparativo.',
+        thMot: 'Motorista / Pseudônimo',
+        thWin: 'Janela Autorizada',
+        thDef: 'Taxa Defensiva',
+        thExp: 'Despesas (BRL)',
+        thInc: 'Receitas (BRL)',
+        thDate: 'Data',
+        thDriver: 'Motorista',
+        thCat: 'Categoria',
+        thIssuer: 'Emissor / Local',
+        thPlate: 'Placa',
+        emptyMot: 'Nenhum motorista ativo ou registro encontrado para o filtro atual.',
+        emptyDoc: 'Nenhum documento auditado disponível nesta janela de consentimento.'
+      },
+      ES: {
+        brandTitle: 'Torre de Mando Institucional',
+        loginTitle: 'Acceso Gestor Autorizado',
+        loginDesc: 'Lectura auditada vía Muralla China y Ledger de Consentimiento activo.',
+        lblEntId: 'Identificador de la Entidad (Entidade_ID)',
+        lblSegredo: 'Clave Secreta Institucional',
+        btnLogin: 'Autenticar en la Torre',
+        secNote: 'DOMINIO SOBERANO • SESIÓN EFÍMERA • LOG DE AUDITORÍA SHA-256 ACTIVO',
+        btnRefresh: 'Actualizar',
+        btnExportPdf: 'Generar Dossier PDF',
+        btnLogout: 'Salir',
+        lblVdoLim: 'Límite VDO',
+        lblVisao: 'Visión Activa',
+        titleChartFin: 'Comparativo Financiero por Conductor (Ingresos vs. Gastos)',
+        titleChartVdo: 'Índice de Conducción Defensiva (Telemetría VDO)',
+        secTitleMot: 'Vínculos Autorizados y Consolidado por Conductor',
+        secTitleDoc: 'Registros Auditados en la Ventana Consentida',
+        phMot: 'Filtrar conductor o vínculo...',
+        phDoc: 'Filtrar placa, categoría, emisor o conductor...',
+        synced: 'Sincronizado',
+        modeRisco: 'Telemetría VDO y Conformidad de Riesgo (Sin valores financieros)',
+        modeTrans: 'Operacional Completo (Flota, Financiero Mercosur/BRL y VDO)',
+        kpiMot: 'Conductores Vinculados',
+        kpiMotSub: 'Llaves activas bajo consentimiento',
+        kpiDoc: 'Documentos en Ventana',
+        kpiDocSub: 'Registros auditados en el período',
+        kpiVdo: 'Discos VDO Auditados',
+        kpiVdoSub: 'Límite configurado: ',
+        kpiDef: 'Conducción Defensiva VDO',
+        kpiDefSub: 'Discos dentro del límite operativo',
+        kpiDesp: 'Gastos Operativos',
+        kpiDespSub: 'Convertido vía CAMBIO_DIARIO',
+        kpiRec: 'Ingresos / Fletes',
+        kpiRecSub: 'Comprobantes en ventana activa',
+        vdoConfOk: 'CONFORMIDAD ALTA',
+        vdoConfWarn: 'ATENCIÓN OPERATIVA',
+        noChart: 'Sin vínculos activos para gráfico.',
+        thMot: 'Conductor / Seudónimo',
+        thWin: 'Ventana Autorizada',
+        thDef: 'Tasa Defensiva',
+        thExp: 'Gastos (BRL)',
+        thInc: 'Ingresos (BRL)',
+        thDate: 'Fecha',
+        thDriver: 'Conductor',
+        thCat: 'Categoría',
+        thIssuer: 'Emisor / Local',
+        thPlate: 'Placa',
+        emptyMot: 'Ningún conductor activo encontrado.',
+        emptyDoc: 'Ningún documento auditado disponible.'
+      },
+      EN: {
+        brandTitle: 'Institutional Command Tower',
+        loginTitle: 'Authorized Manager Access',
+        loginDesc: 'Audited read-only access governed by Chinese Wall & Consent Ledger.',
+        lblEntId: 'Entity Identifier (Entidade_ID)',
+        lblSegredo: 'Institutional Secret Key',
+        btnLogin: 'Authenticate to Tower',
+        secNote: 'SOVEREIGN DOMAIN • EPHEMERAL SESSION • SHA-256 AUDIT LOG ACTIVE',
+        btnRefresh: 'Refresh',
+        btnExportPdf: 'Generate PDF Dossier',
+        btnLogout: 'Sign Out',
+        lblVdoLim: 'VDO Limit',
+        lblVisao: 'Active Scope',
+        titleChartFin: 'Driver Financial Comparison (Revenue vs. Expenses)',
+        titleChartVdo: 'Defensive Driving Index (VDO Telemetry)',
+        secTitleMot: 'Authorized Links & Driver Summary',
+        secTitleDoc: 'Audited Records Within Consent Window',
+        phMot: 'Filter driver or link ID...',
+        phDoc: 'Filter plate, category, issuer or driver...',
+        synced: 'Synced',
+        modeRisco: 'VDO Telemetry & Risk Compliance (Financials Masked)',
+        modeTrans: 'Full Operations (Fleet, Mercosur/BRL Financials & VDO)',
+        kpiMot: 'Linked Drivers',
+        kpiMotSub: 'Active keys under holder consent',
+        kpiDoc: 'Documents in Window',
+        kpiDocSub: 'Audited records in active period',
+        kpiVdo: 'Audited VDO Discs',
+        kpiVdoSub: 'Configured threshold: ',
+        kpiDef: 'VDO Defensive Driving',
+        kpiDefSub: 'Discs within operational speed limit',
+        kpiDesp: 'Operating Expenses',
+        kpiDespSub: 'Converted via CAMBIO_DIARIO',
+        kpiRec: 'Freight / Revenue',
+        kpiRecSub: 'Vouchers in active consent window',
+        vdoConfOk: 'HIGH COMPLIANCE',
+        vdoConfWarn: 'OPERATIONAL ALERT',
+        noChart: 'Awaiting active driver links to display chart.',
+        thMot: 'Driver / Pseudonym',
+        thWin: 'Authorized Window',
+        thDef: 'Defensive Rate',
+        thExp: 'Expenses (BRL)',
+        thInc: 'Revenue (BRL)',
+        thDate: 'Date',
+        thDriver: 'Driver',
+        thCat: 'Category',
+        thIssuer: 'Issuer / Location',
+        thPlate: 'Plate',
+        emptyMot: 'No active drivers or records found for current filter.',
+        emptyDoc: 'No audited documents available within this consent window.'
+      }
+    };
+
+    function tDash(key) {
+      var d = DICT_DASH[langDash] || DICT_DASH.PT;
+      return d[key] || DICT_DASH.PT[key] || key;
+    }
+
     function alternarIdiomaDash() {
-      langDash = langDash === 'PT' ? 'ES' : 'PT';
+      var idx = LANGS_DASH.indexOf(langDash);
+      langDash = LANGS_DASH[(idx + 1) % LANGS_DASH.length];
       localStorage.setItem('ignis_lang', langDash);
       aplicarIdiomaDash();
       if (estadoPainel.ticket && estadoPainel.resumo) {
@@ -536,22 +697,28 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
     }
 
     function aplicarIdiomaDash() {
-      var es = langDash === 'ES';
-      document.getElementById('dPt').style.color = es ? 'var(--text-muted)' : 'var(--gold)';
-      document.getElementById('dEs').style.color = es ? 'var(--gold)' : 'var(--text-muted)';
-      document.getElementById('dashBrandTitle').textContent = es ? 'Torre de Mando Institucional' : 'Torre de Comando Institucional';
-      document.getElementById('loginTitle').textContent = es ? 'Acceso Gestor Autorizado' : 'Acesso Gestor Autorizado';
-      document.getElementById('loginDesc').textContent = es ? 'Lectura auditada vía Muralla China y Ledger de Consentimiento activo.' : 'Leitura auditada via Muralha Chinesa e Ledger de Consentimento ativo.';
-      document.getElementById('lblEntId').textContent = es ? 'Identificador de la Entidad (Entidade_ID)' : 'Identificador da Entidade (Entidade_ID)';
-      document.getElementById('lblSegredo').textContent = es ? 'Clave Secreta Institucional' : 'Chave Secreta Institucional';
-      document.getElementById('btnLogin').textContent = es ? 'Autenticar en la Torre' : 'Autenticar na Torre';
-      document.getElementById('btnRefresh').textContent = es ? 'Actualizar' : 'Atualizar';
-      document.getElementById('btnExportPdf').textContent = es ? 'Generar Dossier PDF' : 'Gerar Dossiê PDF';
-      document.getElementById('btnLogout').textContent = es ? 'Salir' : 'Sair';
-      document.getElementById('titleChartFin').textContent = es ? 'Comparativo Financiero por Conductor (Ingresos vs. Gastos)' : 'Comparativo Financeiro por Motorista (Receitas vs. Despesas)';
-      document.getElementById('titleChartVdo').textContent = es ? 'Índice de Conducción Defensiva (Telemetría VDO)' : 'Índice de Condução Defensiva (Telemetria VDO)';
-      document.getElementById('secTitleMot').textContent = es ? 'Vínculos Autorizados y Consolidado por Conductor' : 'Vínculos Autorizados & Consolidado por Motorista';
-      document.getElementById('secTitleDoc').textContent = es ? 'Registros Auditados en la Ventana Consentida' : 'Registros Auditados na Janela Consentida';
+      document.getElementById('dPt').style.color = langDash === 'PT' ? 'var(--gold)' : 'var(--text-muted)';
+      document.getElementById('dEs').style.color = langDash === 'ES' ? 'var(--gold)' : 'var(--text-muted)';
+      document.getElementById('dEn').style.color = langDash === 'EN' ? 'var(--gold)' : 'var(--text-muted)';
+
+      document.getElementById('dashBrandTitle').textContent = tDash('brandTitle');
+      document.getElementById('loginTitle').textContent = tDash('loginTitle');
+      document.getElementById('loginDesc').textContent = tDash('loginDesc');
+      document.getElementById('lblEntId').textContent = tDash('lblEntId');
+      document.getElementById('lblSegredo').textContent = tDash('lblSegredo');
+      document.getElementById('btnLogin').textContent = tDash('btnLogin');
+      document.getElementById('secNote').textContent = tDash('secNote');
+      document.getElementById('btnRefresh').textContent = tDash('btnRefresh');
+      document.getElementById('btnExportPdf').textContent = tDash('btnExportPdf');
+      document.getElementById('btnLogout').textContent = tDash('btnLogout');
+      document.getElementById('lblVdoLim').textContent = tDash('lblVdoLim');
+      document.getElementById('lblVisao').textContent = tDash('lblVisao');
+      document.getElementById('titleChartFin').textContent = tDash('titleChartFin');
+      document.getElementById('titleChartVdo').textContent = tDash('titleChartVdo');
+      document.getElementById('secTitleMot').textContent = tDash('secTitleMot');
+      document.getElementById('secTitleDoc').textContent = tDash('secTitleDoc');
+      document.getElementById('filtroMotorista').placeholder = tDash('phMot');
+      document.getElementById('filtroDocumento').placeholder = tDash('phDoc');
     }
 
     function escapeHtml(valor) {
@@ -614,13 +781,13 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       var segredo = document.getElementById('inputSegredo').value;
 
       if (!entidadeId || !segredo) {
-        mostrarAlerta('loginAlert', langDash === 'ES' ? 'Informe el Identificador y la Clave Secreta.' : 'Informe o Identificador da Entidade e a Chave Secreta.');
+        mostrarAlerta('loginAlert', 'Informe Entity ID & Secret Key.');
         return;
       }
 
       var btn = document.getElementById('btnLogin');
       btn.disabled = true;
-      btn.textContent = langDash === 'ES' ? 'Validando Credenciales...' : 'Validando Credenciais...';
+      btn.textContent = '...';
 
       google.script.run
         .withSuccessHandler(function(res) {
@@ -658,7 +825,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
 
       var btnRefresh = document.getElementById('btnRefresh');
       btnRefresh.disabled = true;
-      btnRefresh.textContent = langDash === 'ES' ? 'Sincronizando...' : 'Sincronizando...';
+      btnRefresh.textContent = '...';
 
       google.script.run
         .withSuccessHandler(function(dados) {
@@ -691,9 +858,8 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
 
     function renderizarPainelCompleto() {
       var riscoMode = isPerfilRisco(estadoPainel.tipoPerfil);
-      var es = langDash === 'ES';
 
-      document.getElementById('topUpdated').textContent = 'Sincronizado: ' + escapeHtml(estadoPainel.atualizado);
+      document.getElementById('topUpdated').textContent = tDash('synced') + ': ' + escapeHtml(estadoPainel.atualizado);
       document.getElementById('entNome').textContent = estadoPainel.empresa || '--';
       document.getElementById('entIdDisplay').textContent = estadoPainel.entidadeId || '--';
       document.getElementById('entLimiarVdo').textContent = estadoPainel.limiarVdoKmh + ' km/h';
@@ -702,9 +868,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       badge.textContent = estadoPainel.tipoPerfil || 'TRANSPORTADORA';
       badge.className = 'badge-profile ' + (riscoMode ? 'badge-risco' : 'badge-transportadora');
 
-      document.getElementById('entVisaoModo').textContent = riscoMode
-        ? (es ? 'Telemetría VDO y Conformidad de Riesgo (Sin valores financieros)' : 'Telemetria VDO & Conformidade de Risco (Sem valores financeiros)')
-        : (es ? 'Operacional Completo (Flota, Financiero Mercosur/BRL y VDO)' : 'Operacional Completo (Frota, Financeiro Mercosul/BRL & VDO)');
+      document.getElementById('entVisaoModo').textContent = riscoMode ? tDash('modeRisco') : tDash('modeTrans');
 
       renderizarKpis(riscoMode);
       renderizarGraficosSvg(riscoMode);
@@ -712,7 +876,6 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
     }
 
     function renderizarGraficosSvg(riscoMode) {
-      var es = langDash === 'ES';
       var r = estadoPainel.resumo || {};
       var mots = estadoPainel.motoristas || [];
 
@@ -727,9 +890,9 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
           '<circle cx="58" cy="55" r="38" fill="none" stroke="#252e3f" stroke-width="10"/>' +
           '<circle cx="58" cy="55" r="38" fill="none" stroke="' + corVdo + '" stroke-width="10" stroke-linecap="round" stroke-dasharray="' + dash + ' ' + Math.round(circ) + '" transform="rotate(-90 58 55)"/>' +
           '<text x="58" y="60" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="bold">' + Math.round(pctVdo) + '%</text>' +
-          '<text x="118" y="34" fill="#f1f5f9" font-size="11" font-weight="bold">Discos Auditados: ' + totalDiscos + '</text>' +
-          '<text x="118" y="54" fill="#94a3b8" font-size="10">' + (es ? 'Límite VDO: ' : 'Limiar VDO: ') + estadoPainel.limiarVdoKmh + ' km/h</text>' +
-          '<text x="118" y="74" fill="' + corVdo + '" font-size="10" font-weight="bold">' + (pctVdo >= 85 ? (es ? 'CONFORMIDAD ALTA' : 'CONFORMIDADE ALTA') : (es ? 'ATENCIÓN OPERATIVA' : 'ATENÇÃO OPERACIONAL')) + '</text>' +
+          '<text x="118" y="34" fill="#f1f5f9" font-size="11" font-weight="bold">VDO Discs: ' + totalDiscos + '</text>' +
+          '<text x="118" y="54" fill="#94a3b8" font-size="10">' + escapeHtml(tDash('lblVdoLim')) + ': ' + estadoPainel.limiarVdoKmh + ' km/h</text>' +
+          '<text x="118" y="74" fill="' + corVdo + '" font-size="10" font-weight="bold">' + escapeHtml(pctVdo >= 85 ? tDash('vdoConfOk') : tDash('vdoConfWarn')) + '</text>' +
         '</svg>';
 
       var cardFin = document.getElementById('cardChartFin');
@@ -742,7 +905,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       if (mots.length === 0) {
         document.getElementById('svgChartFin').innerHTML =
           '<div style="color:var(--text-muted);font-family:var(--font-mono);font-size:11px;padding:24px 0;">' +
-          (es ? 'Sin vínculos activos para gráfico.' : 'Aguardando vínculos ativos para exibir comparativo.') + '</div>';
+          escapeHtml(tDash('noChart')) + '</div>';
         return;
       }
 
@@ -773,49 +936,24 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
 
       document.getElementById('svgChartFin').innerHTML =
         '<svg viewBox="0 0 380 ' + altura + '" style="width:100%;height:auto;font-family:monospace;">' +
-          '<rect x="115" y="4" width="8" height="8" fill="#10b981"/><text x="127" y="12" fill="#94a3b8" font-size="9">' + (es ? 'Ingresos' : 'Receitas') + '</text>' +
-          '<rect x="195" y="4" width="8" height="8" fill="#ef4444"/><text x="207" y="12" fill="#94a3b8" font-size="9">' + (es ? 'Gastos' : 'Despesas') + '</text>' +
+          '<rect x="115" y="4" width="8" height="8" fill="#10b981"/><text x="127" y="12" fill="#94a3b8" font-size="9">+</text>' +
+          '<rect x="155" y="4" width="8" height="8" fill="#ef4444"/><text x="167" y="12" fill="#94a3b8" font-size="9">-</text>' +
           barras +
         '</svg>';
     }
 
     function renderizarKpis(riscoMode) {
       var r = estadoPainel.resumo || {};
-      var es = langDash === 'ES';
       var cards = [
-        {
-          label: es ? 'Conductores Vinculados' : 'Motoristas Vinculados',
-          value: formatarNumero(r.motoristasAtivos || 0, 0),
-          sub: es ? 'Llaves activas bajo consentimiento' : 'Chaves ativas sob consentimento'
-        },
-        {
-          label: es ? 'Documentos en Ventana' : 'Documentos na Janela',
-          value: formatarNumero(r.documentosJanela || 0, 0),
-          sub: es ? 'Registros auditados en el período' : 'Registros auditados no período'
-        },
-        {
-          label: es ? 'Discos VDO Auditados' : 'Discos VDO Auditados',
-          value: formatarNumero(r.vdoDiscosTotal || 0, 0),
-          sub: (es ? 'Límite configurado: ' : 'Limiar configurado: ') + estadoPainel.limiarVdoKmh + ' km/h'
-        },
-        {
-          label: es ? 'Conducción Defensiva VDO' : 'Condução Defensiva VDO',
-          value: formatarNumero(r.vdoTaxaDefensivaPct || 0, 1) + '%',
-          sub: es ? 'Discos dentro del límite operativo' : 'Discos dentro do limite operacional'
-        }
+        { label: tDash('kpiMot'), value: formatarNumero(r.motoristasAtivos || 0, 0), sub: tDash('kpiMotSub') },
+        { label: tDash('kpiDoc'), value: formatarNumero(r.documentosJanela || 0, 0), sub: tDash('kpiDocSub') },
+        { label: tDash('kpiVdo'), value: formatarNumero(r.vdoDiscosTotal || 0, 0), sub: tDash('kpiVdoSub') + estadoPainel.limiarVdoKmh + ' km/h' },
+        { label: tDash('kpiDef'), value: formatarNumero(r.vdoTaxaDefensivaPct || 0, 1) + '%', sub: tDash('kpiDefSub') }
       ];
 
       if (!riscoMode) {
-        cards.push({
-          label: es ? 'Gastos Operativos' : 'Despesas Operacionais',
-          value: formatarBRL(r.despesasOperacionaisBRL || 0),
-          sub: es ? 'Convertido vía CAMBIO_DIARIO' : 'Convertido via CAMBIO_DIARIO'
-        });
-        cards.push({
-          label: es ? 'Ingresos / Fletes' : 'Receitas / Fretes',
-          value: formatarBRL(r.receitasOperacionaisBRL || 0),
-          sub: es ? 'Comprobantes en ventana activa' : 'Comprovantes na janela ativa'
-        });
+        cards.push({ label: tDash('kpiDesp'), value: formatarBRL(r.despesasOperacionaisBRL || 0), sub: tDash('kpiDespSub') });
+        cards.push({ label: tDash('kpiRec'), value: formatarBRL(r.receitasOperacionaisBRL || 0), sub: tDash('kpiRecSub') });
       }
 
       var html = '';
@@ -833,19 +971,18 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
     function renderizarTabelas() {
       var riscoMode = isPerfilRisco(estadoPainel.tipoPerfil);
       var limiar = estadoPainel.limiarVdoKmh;
-      var es = langDash === 'ES';
 
       var theadMot = '<tr>' +
-        '<th>' + (es ? 'Conductor / Seudónimo' : 'Motorista / Pseudônimo') + '</th>' +
-        '<th>Vínculo ID</th>' +
-        '<th>' + (es ? 'Ventana Autorizada' : 'Janela Autorizada') + '</th>' +
+        '<th>' + escapeHtml(tDash('thMot')) + '</th>' +
+        '<th>ID</th>' +
+        '<th>' + escapeHtml(tDash('thWin')) + '</th>' +
         '<th>Docs</th>' +
-        '<th>Discos VDO</th>' +
-        '<th>' + (es ? 'Tasa Defensiva' : 'Taxa Defensiva') + '</th>' +
-        '<th>Vel. Máx.</th>';
+        '<th>VDO</th>' +
+        '<th>' + escapeHtml(tDash('thDef')) + '</th>' +
+        '<th>Max</th>';
 
       if (!riscoMode) {
-        theadMot += '<th>' + (es ? 'Gastos (BRL)' : 'Despesas (BRL)') + '</th><th>' + (es ? 'Ingresos (BRL)' : 'Receitas (BRL)') + '</th>';
+        theadMot += '<th>' + escapeHtml(tDash('thExp')) + '</th><th>' + escapeHtml(tDash('thInc')) + '</th>';
       }
       theadMot += '</tr>';
       document.getElementById('theadMotoristas').innerHTML = theadMot;
@@ -860,7 +997,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       var colsMot = riscoMode ? 7 : 9;
       if (motFiltrados.length === 0) {
         document.getElementById('tbodyMotoristas').innerHTML =
-          '<tr><td colspan="' + colsMot + '" class="empty-state">' + (es ? 'Ningún conductor activo encontrado.' : 'Nenhum motorista ativo ou registro encontrado para o filtro atual.') + '</td></tr>';
+          '<tr><td colspan="' + colsMot + '" class="empty-state">' + escapeHtml(tDash('emptyMot')) + '</td></tr>';
       } else {
         var rowsMot = '';
         for (var i = 0; i < motFiltrados.length; i++) {
@@ -869,10 +1006,10 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
           var excedeu = velMax > limiar;
           var badgeVel = velMax > 0
             ? '<span class="status-pill ' + (excedeu ? 'status-warn' : 'status-ok') + '">' + escapeHtml(velMax) + ' km/h</span>'
-            : '<span class="status-pill status-neutral">Sem VDO</span>';
+            : '<span class="status-pill status-neutral">—</span>';
 
           rowsMot += '<tr>' +
-            '<td><strong>' + escapeHtml(m.identificacao || 'Motorista') + '</strong></td>' +
+            '<td><strong>' + escapeHtml(m.identificacao || 'Driver') + '</strong></td>' +
             '<td class="mono">' + escapeHtml(m.vinculoId || '--') + '</td>' +
             '<td class="mono">' + escapeHtml(m.janela || '--') + '</td>' +
             '<td class="mono">' + escapeHtml(m.qtdDocs || 0) + '</td>' +
@@ -890,15 +1027,15 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       }
 
       var theadDoc = '<tr>' +
-        '<th>' + (es ? 'Fecha' : 'Data') + '</th>' +
-        '<th>' + (es ? 'Conductor' : 'Motorista') + '</th>' +
-        '<th>' + (es ? 'Categoría' : 'Categoria') + '</th>' +
-        '<th>Emissor / Local</th>' +
-        '<th>Placa</th>' +
-        '<th>Vel. Máx. VDO</th>';
+        '<th>' + escapeHtml(tDash('thDate')) + '</th>' +
+        '<th>' + escapeHtml(tDash('thDriver')) + '</th>' +
+        '<th>' + escapeHtml(tDash('thCat')) + '</th>' +
+        '<th>' + escapeHtml(tDash('thIssuer')) + '</th>' +
+        '<th>' + escapeHtml(tDash('thPlate')) + '</th>' +
+        '<th>VDO Max</th>';
 
       if (!riscoMode) {
-        theadDoc += '<th>Valor Original</th><th>Valor (BRL)</th>';
+        theadDoc += '<th>Original</th><th>BRL</th>';
       }
       theadDoc += '</tr>';
       document.getElementById('theadDocumentos').innerHTML = theadDoc;
@@ -919,7 +1056,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
       var colsDoc = riscoMode ? 6 : 8;
       if (docFiltrados.length === 0) {
         document.getElementById('tbodyDocumentos').innerHTML =
-          '<tr><td colspan="' + colsDoc + '" class="empty-state">' + (es ? 'Ningún documento auditado disponible.' : 'Nenhum documento auditado disponível nesta janela de consentimento.') + '</td></tr>';
+          '<tr><td colspan="' + colsDoc + '" class="empty-state">' + escapeHtml(tDash('emptyDoc')) + '</td></tr>';
       } else {
         var rowsDoc = '';
         for (var j = 0; j < docFiltrados.length; j++) {
@@ -956,7 +1093,7 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
 
       var btn = document.getElementById('btnExportPdf');
       btn.disabled = true;
-      btn.textContent = langDash === 'ES' ? 'Generando PDF...' : 'Gerando PDF...';
+      btn.textContent = '...';
 
       google.script.run
         .withSuccessHandler(function(res) {
@@ -967,15 +1104,15 @@ const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv
             var barra =
               '<div class="no-print" style="background:#080808;color:#e8e0d0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;border-bottom:2px solid #c8860a;position:sticky;top:0;">' +
               '<span style="color:#c8860a;font-weight:bold;letter-spacing:2px;">I\'GNIS CORE</span>' +
-              '<button onclick="window.print()" style="background:#c8860a;color:#080808;border:none;padding:10px 16px;font-weight:bold;font-family:monospace;cursor:pointer;">🖨️ SALVAR PDF / IMPRIMIR</button>' +
+              '<button onclick="window.print()" style="background:#c8860a;color:#080808;border:none;padding:10px 16px;font-weight:bold;font-family:monospace;cursor:pointer;">🖨️ PRINT / PDF</button>' +
               '</div><style>@media print { .no-print { display:none !important; } body { margin:0; } }</style>';
-            var blob = new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + escapeHtml(res.nome || 'Dossie') + '</title></head><body style="margin:0;">' + barra + res.htmlDoc + '</body></html>'], { type: 'text/html;charset=utf-8' });
+            var blob = new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + escapeHtml(res.nome || 'Dossier') + '</title></head><body style="margin:0;">' + barra + res.htmlDoc + '</body></html>'], { type: 'text/html;charset=utf-8' });
             var blobUrl = URL.createObjectURL(blob);
             window.open(blobUrl, '_blank');
           } else if (res && res.url) {
             window.open(res.url, '_blank');
           } else {
-            mostrarAlerta('dashAlert', 'Não foi possível gerar o Dossiê PDF.');
+            mostrarAlerta('dashAlert', 'Erro ao gerar PDF.');
           }
         })
         .withFailureHandler(function(err) {
