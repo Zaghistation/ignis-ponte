@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>I'GNIS CORE v7.3.2</title>
+<title>I'GNIS CORE v7.3.3</title>
 <style>
 :root {
   --black:         #080808;
@@ -262,8 +262,8 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
     <div class="top-bar">
       <div class="brand">I'GNIS CORE</div>
       <div class="top-actions">
-        <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
-        <div class="badge-pill">v7.3.2</div>
+        <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span> | <span class="l-en">EN</span></button>
+        <div class="badge-pill">v7.3.3</div>
       </div>
     </div>
     <div class="card-box">
@@ -281,7 +281,7 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
     <div class="top-bar">
       <div class="brand">I'GNIS CORE</div>
       <div class="top-actions">
-        <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
+        <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span> | <span class="l-en">EN</span></button>
         <div class="badge-pill">SHA-256 VAULT</div>
       </div>
     </div>
@@ -290,8 +290,8 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
       <h1 data-i18n="auth_title">ACESSO AO NÚCLEO</h1>
       <p data-i18n="auth_desc">Abra seu cofre individual. Seus comprovantes ficam isolados sob assinatura criptográfica própria e governança LGPD.</p>
 
-      <input type="text" id="inputTitular" class="input-field" placeholder="SEU NOME COMPLETO OU APELIDO">
-      <input type="tel" id="inputChave" class="input-field" placeholder="CHAVE PESSOAL (MIN. 6 CARACTERES)">
+      <input type="text" id="inputTitular" class="input-field" data-i18n-ph="ph_titular" placeholder="SEU NOME COMPLETO OU APELIDO">
+      <input type="tel" id="inputChave" class="input-field" data-i18n-ph="ph_chave" placeholder="CHAVE PESSOAL (MIN. 6 CARACTERES)">
 
       <label class="lgpd-box">
         <input type="checkbox" id="chkLgpd" checked>
@@ -311,7 +311,7 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
   <div id="bio-screen" style="display:none; flex-direction:column; justify-content:space-between; flex:1;">
     <div class="top-bar">
       <div class="brand">I'GNIS CORE</div>
-      <div class="badge-pill">LGPD 0-DIAS</div>
+      <div class="badge-pill">LGPD 0-DAYS</div>
     </div>
 
     <div class="card-box">
@@ -320,10 +320,10 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
 
       <div class="bio-frame-wrap" onclick="document.getElementById('bioSelfieInput').click()">
         <img id="bioPreviewImg" alt="Selfie">
-        <div class="bio-placeholder" id="bioPlaceholder">📷<br><br>TOQUE PARA CAPTURAR SUA SELFIE</div>
+        <div class="bio-placeholder" id="bioPlaceholder" data-i18n="bio_tap">📷 TOQUE PARA CAPTURAR SUA SELFIE</div>
       </div>
 
-      <div class="bio-challenge" id="bioChallengeText">👁️ OLHOS ABERTOS, ROSTO ILUMINADO E SEM ÓCULOS ESCUROS</div>
+      <div class="bio-challenge" id="bioChallengeText" data-i18n="bio_chal">👁️ OLHOS ABERTOS, ROSTO ILUMINADO E SEM ÓCULOS ESCUROS</div>
       <input type="file" id="bioSelfieInput" accept="image/*" capture="user" style="display:none;">
 
       <button class="btn-primary" id="btnAbrirCameraBio" onclick="document.getElementById('bioSelfieInput').click()" data-i18n="bio_btn">
@@ -346,7 +346,7 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
       <div class="top-bar">
         <div class="brand">I'GNIS CORE</div>
         <div class="top-actions">
-          <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
+          <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span> | <span class="l-en">EN</span></button>
           <div class="badge-pill" id="badgeVaultId">VAULT</div>
         </div>
       </div>
@@ -357,7 +357,7 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
       <h1 data-i18n="cap_title">NÚCLEO ATIVO</h1>
       <p data-i18n="cap_desc">Recibos (Brasil ou Internacional), notas fiscais, discos VDO ou etiquetas de carga. Fotografe ou envie em lote.</p>
 
-      <input type="text" id="notaInput" class="input-field" placeholder="OBSERVAÇÃO RÁPIDA (OPCIONAL)">
+      <input type="text" id="notaInput" class="input-field" data-i18n-ph="ph_nota" placeholder="OBSERVAÇÃO RÁPIDA (OPCIONAL)">
       <input type="file" id="fileInput" accept="image/*,application/pdf" capture="environment" style="display:none;">
       <input type="file" id="batchInput" accept="image/*,application/pdf" multiple style="display:none;">
 
@@ -394,7 +394,7 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
   <header class="vault-head">
     <div class="brand" style="font-size:19px;">I'GNIS CORE</div>
     <div style="display:flex;gap:6px;">
-      <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span></button>
+      <button class="lang-btn" onclick="toggleLang()"><span class="l-pt">PT</span> | <span class="l-es">ES</span> | <span class="l-en">EN</span></button>
       <button class="btn-nav" onclick="voltarCaptura()" data-i18n="nav_back">← CAPTURA</button>
       <button class="btn-nav" style="color:var(--text-secondary);border-color:var(--border-bright);" onclick="sairCofre(true)" data-i18n="nav_exit">SAIR</button>
     </div>
@@ -407,17 +407,17 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
       <div class="badge-pill" style="display:inline-block;margin-top:4px;" id="v-nivel">NÍVEL DE ORGANIZAÇÃO</div>
       <div style="font-family:var(--font-mono);font-size:9px;color:var(--green-bright);margin-top:8px;" id="v-bio-badge">🛡️ SELO: —</div>
       <div>
-        <button class="btn-rev-bio" id="btnRevogarSelo" onclick="revogarSeloTitular()">REVOGAR SELO LGPD</button>
+        <button class="btn-rev-bio" id="btnRevogarSelo" onclick="revogarSeloTitular()" data-i18n="btn_rev_bio">REVOGAR SELO LGPD</button>
       </div>
     </div>
 
     <!-- FILTRO DE PERÍODO -->
     <div class="filter-bar">
-      <button class="f-chip active" data-range="ALL" onclick="setFiltroPeriodo('ALL', this)">Tudo</button>
-      <button class="f-chip" data-range="TODAY" onclick="setFiltroPeriodo('TODAY', this)">Hoje</button>
-      <button class="f-chip" data-range="7D" onclick="setFiltroPeriodo('7D', this)">7 Dias</button>
-      <button class="f-chip" data-range="15D" onclick="setFiltroPeriodo('15D', this)">Quinzena</button>
-      <button class="f-chip" data-range="MONTH" onclick="setFiltroPeriodo('MONTH', this)">Mês</button>
+      <button class="f-chip active" data-range="ALL" onclick="setFiltroPeriodo('ALL', this)" data-i18n="f_all">Tudo</button>
+      <button class="f-chip" data-range="TODAY" onclick="setFiltroPeriodo('TODAY', this)" data-i18n="f_today">Hoje</button>
+      <button class="f-chip" data-range="7D" onclick="setFiltroPeriodo('7D', this)" data-i18n="f_7d">7 Dias</button>
+      <button class="f-chip" data-range="15D" onclick="setFiltroPeriodo('15D', this)" data-i18n="f_15d">Quinzena</button>
+      <button class="f-chip" data-range="MONTH" onclick="setFiltroPeriodo('MONTH', this)" data-i18n="f_month">Mês</button>
       <div class="date-range">
         <input type="date" id="dtIni" class="date-in" onchange="aplicarFiltroDatas()">
         <input type="date" id="dtFim" class="date-in" onchange="aplicarFiltroDatas()">
@@ -446,38 +446,38 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
     <!-- GRÁFICOS SVG LEVES (< 3KB) -->
     <div class="charts-grid">
       <div class="panel-box" style="margin-bottom:0;">
-        <div class="p-title">Fluxo Profissional (Cascata)</div>
+        <div class="p-title" data-i18n="ch_flow">Fluxo Profissional (Cascata)</div>
         <div id="chartWaterfall"></div>
       </div>
       <div class="panel-box" style="margin-bottom:0;">
-        <div class="p-title">Distribuição por Esfera</div>
+        <div class="p-title" data-i18n="ch_dist">Distribuição por Esfera</div>
         <div id="chartDonut"></div>
       </div>
     </div>
 
     <div class="export-bar" style="margin-top:14px;">
-      <button class="btn-export" id="btnPdfExtrato" onclick="gerarPdf('EXTRATO')">📄 EXTRATO PDF</button>
-      <button class="btn-export" id="btnPdfCert" onclick="gerarPdf('CERTIFICADO')">🛡️ RELATÓRIO OFICIAL</button>
+      <button class="btn-export" id="btnPdfExtrato" onclick="gerarPdf('EXTRATO')" data-i18n="btn_pdf1">📄 EXTRATO PDF</button>
+      <button class="btn-export" id="btnPdfCert" onclick="gerarPdf('CERTIFICADO')" data-i18n="btn_pdf2">🛡️ RELATÓRIO OFICIAL</button>
     </div>
 
     <!-- CHAVE MULTI-VÍNCULO (MURALHA CHINESA) -->
     <div class="panel-box">
-      <div class="p-title">Conexão Institucional (Muralha Chinesa)</div>
+      <div class="p-title" data-i18n="inst_title">Conexão Institucional (Muralha Chinesa)</div>
       <div style="display:flex;gap:6px;margin-bottom:8px;">
-        <input type="text" id="inputConviteEmp" class="input-field" style="margin-bottom:0;padding:10px;font-size:12px;" placeholder="CÓDIGO CONVITE (EX: ZAGHI2026)">
+        <input type="text" id="inputConviteEmp" class="input-field" style="margin-bottom:0;padding:10px;font-size:12px;" data-i18n-ph="ph_convite" placeholder="CÓDIGO CONVITE (EX: ZAGHI2026)">
         <select id="selectDiasJanela" class="input-field" style="width:92px;margin-bottom:0;padding:10px 4px;font-size:11px;">
-          <option value="7">7 dias</option>
-          <option value="15">15 dias</option>
-          <option value="30" selected>30 dias</option>
-          <option value="60">60 dias</option>
-          <option value="90">90 dias</option>
+          <option value="7">7d</option>
+          <option value="15">15d</option>
+          <option value="30" selected>30d</option>
+          <option value="60">60d</option>
+          <option value="90">90d</option>
         </select>
       </div>
       <label class="lgpd-box" style="margin-bottom:10px;padding:8px;">
         <input type="checkbox" id="chkExibirNomeEmp" checked>
-        <span>Autorizo exibir meu nome operacional na janela ativa (se desmarcado, exibe apenas pseudônimo DRV).</span>
+        <span data-i18n="inst_opt">Autorizo exibir meu nome operacional na janela ativa (se desmarcado, exibe apenas pseudônimo DRV).</span>
       </label>
-      <button class="btn-primary" style="padding:11px;font-size:11px;margin-bottom:10px;" onclick="conectarEmpresa()">CONECTAR CHAVE INSTITUCIONAL</button>
+      <button class="btn-primary" style="padding:11px;font-size:11px;margin-bottom:10px;" onclick="conectarEmpresa()" data-i18n="inst_btn">CONECTAR CHAVE INSTITUCIONAL</button>
       <div id="listaVinculos"></div>
     </div>
 
@@ -489,7 +489,10 @@ const MODO_APP = (URL_PARAMS.get("modo") || "app").toLowerCase();
 </div>
 
 <script>
+const LANGS = ['PT', 'ES', 'EN'];
 let lang = localStorage.getItem('ignis_lang') || 'PT';
+if (LANGS.indexOf(lang) === -1) lang = 'PT';
+
 let ultimoReciboAtivo = null;
 let pendenteBioTicket = null;
 let pendenteBioTitular = null;
@@ -504,24 +507,48 @@ const I18N = {
     inv_btn: '🔐 ATIVAR MEU COFRE AGORA',
     auth_title: 'ACESSO AO NÚCLEO',
     auth_desc: 'Abra seu cofre individual. Seus comprovantes ficam isolados sob assinatura criptográfica própria e governança LGPD.',
+    ph_titular: 'SEU NOME COMPLETO OU APELIDO',
+    ph_chave: 'CHAVE PESSOAL (MIN. 6 CARACTERES)',
     lgpd_txt: 'Concordo com o processamento criptográfico privado dos meus comprovantes (LGPD). Para verificação de titularidade, a selfie é processada via IA e descartada imediatamente sem retenção.',
     auth_btn: '🔐 ABRIR MEU COFRE',
     bio_title: 'VERIFICAÇÃO DO TITULAR',
     bio_desc: 'Tire uma selfie rápida para emitir o selo do seu cofre. A imagem é analisada pela IA e descartada imediatamente.',
+    bio_tap: '📷 TOQUE PARA CAPTURAR SUA SELFIE',
+    bio_chal: '👁️ OLHOS ABERTOS, ROSTO ILUMINADO E SEM ÓCULOS ESCUROS',
     bio_btn: '🤳 TIRAR SELFIE E SELAR COFRE',
     bio_skip: 'CONTINUAR SEM SELO POR ENQUANTO →',
     cap_title: 'NÚCLEO ATIVO',
     cap_desc: 'Recibos (Brasil ou Internacional), notas fiscais, discos VDO ou etiquetas de carga. Fotografe ou envie em lote.',
+    ph_nota: 'OBSERVAÇÃO RÁPIDA (OPCIONAL)',
     cap_btn1: '📸 DIGITALIZAR DOCUMENTO',
     cap_btn2: '⚡ ENVIO EM LOTE (MÚLTIPLOS ARQUIVOS)',
     cap_vault: '🔐 ABRIR MEU COFRE',
     nav_back: '← CAPTURA',
     nav_exit: 'SAIR',
+    btn_rev_bio: 'REVOGAR SELO LGPD',
+    f_all: 'Tudo',
+    f_today: 'Hoje',
+    f_7d: '7 Dias',
+    f_15d: 'Quinzena',
+    f_month: 'Mês',
     m_res_pro: 'Resultado Profissional',
     m_desp_pes: 'Caixa Pessoal / Casa',
     m_ent_pro: 'Entradas Profissionais',
     m_sai_pro: 'Saídas Profissionais',
-    lbl_docs: 'Comprovantes Guardados'
+    ch_flow: 'Fluxo Profissional (Cascata)',
+    ch_dist: 'Distribuição por Esfera',
+    btn_pdf1: '📄 EXTRATO PDF',
+    btn_pdf2: '🛡️ RELATÓRIO OFICIAL',
+    inst_title: 'Conexão Institucional (Muralha Chinesa)',
+    ph_convite: 'CÓDIGO CONVITE (EX: ZAGHI2026)',
+    inst_opt: 'Autorizo exibir meu nome operacional na janela ativa (se desmarcado, exibe apenas pseudônimo DRV).',
+    inst_btn: 'CONECTAR CHAVE INSTITUCIONAL',
+    lbl_docs: 'Comprovantes Guardados',
+    c_in: 'Entradas',
+    c_out: 'Saídas',
+    c_net: 'Líquido',
+    c_pro: 'Profissional',
+    c_pes: 'Pessoal'
   },
   ES: {
     inv_title: 'INTELIGENCIA PATRIMONIAL',
@@ -529,24 +556,97 @@ const I18N = {
     inv_btn: '🔐 ACTIVAR MI BÓVEDA AHORA',
     auth_title: 'ACCESO AL NÚCLEO',
     auth_desc: 'Abra su bóveda individual. Sus comprobantes quedan aislados bajo firma criptográfica propia y gobernanza LGPD.',
+    ph_titular: 'SU NOMBRE COMPLETO O ALIAS',
+    ph_chave: 'CLAVE PERSONAL (MÍN. 6 CARACTERES)',
     lgpd_txt: 'Acepto el procesamiento criptográfico privado de mis comprobantes (LGPD). La selfie se analiza por IA y se descarta inmediatamente sin retención.',
     auth_btn: '🔐 ABRIR MI BÓVEDA',
     bio_title: 'VERIFICACIÓN DEL TITULAR',
     bio_desc: 'Tome una selfie rápida para emitir el sello de su bóveda. La imagen se analiza por IA y se descarta inmediatamente.',
+    bio_tap: '📷 TOQUE PARA CAPTURAR SU SELFIE',
+    bio_chal: '👁️ OJOS ABIERTOS, ROSTRO ILUMINADO Y SIN GAFAS OSCURAS',
     bio_btn: '🤳 TOMAR SELFIE Y SELLAR BÓVEDA',
     bio_skip: 'CONTINUAR SIN SELLO POR AHORA →',
     cap_title: 'NÚCLEO ACTIVO',
     cap_desc: 'Recibos (Brasil o Internacional), facturas, discos VDO o etiquetas de carga. Fotografíe o envíe por lotes.',
+    ph_nota: 'OBSERVACIÓN RÁPIDA (OPCIONAL)',
     cap_btn1: '📸 DIGITALIZAR DOCUMENTO',
     cap_btn2: '⚡ ENVÍO POR LOTES (MÚLTIPLES ARCHIVOS)',
     cap_vault: '🔐 ABRIR MI BÓVEDA',
     nav_back: '← CAPTURA',
     nav_exit: 'SALIR',
+    btn_rev_bio: 'REVOCAR SELLO LGPD',
+    f_all: 'Todo',
+    f_today: 'Hoy',
+    f_7d: '7 Días',
+    f_15d: 'Quincena',
+    f_month: 'Mes',
     m_res_pro: 'Resultado Profesional',
     m_desp_pes: 'Caja Personal / Hogar',
     m_ent_pro: 'Ingresos Profesionales',
     m_sai_pro: 'Gastos Profesionales',
-    lbl_docs: 'Comprobantes Guardados'
+    ch_flow: 'Flujo Profesional (Cascada)',
+    ch_dist: 'Distribución por Esfera',
+    btn_pdf1: '📄 EXTRACTO PDF',
+    btn_pdf2: '🛡️ INFORME OFICIAL',
+    inst_title: 'Conexión Institucional (Muralla China)',
+    ph_convite: 'CÓDIGO INVITACIÓN (EJ: ZAGHI2026)',
+    inst_opt: 'Autorizo mostrar mi nombre operativo en la ventana activa (si se desmarca, muestra solo seudónimo DRV).',
+    inst_btn: 'CONECTAR LLAVE INSTITUCIONAL',
+    lbl_docs: 'Comprobantes Guardados',
+    c_in: 'Ingresos',
+    c_out: 'Gastos',
+    c_net: 'Neto',
+    c_pro: 'Profesional',
+    c_pes: 'Personal'
+  },
+  EN: {
+    inv_title: 'ASSET & FISCAL INTELLIGENCE',
+    inv_desc: 'Organize your personal and business finances without typing a single line. Snap receipts, invoices, or VDO tachograph discs and let the core audit everything in seconds.',
+    inv_btn: '🔐 ACTIVATE MY VAULT NOW',
+    auth_title: 'CORE VAULT ACCESS',
+    auth_desc: 'Open your private vault. Your records remain isolated under your own cryptographic signature and data privacy governance.',
+    ph_titular: 'YOUR FULL NAME OR ALIAS',
+    ph_chave: 'PERSONAL KEY (MIN. 6 CHARACTERS)',
+    lgpd_txt: 'I agree to the private cryptographic processing of my documents. For holder verification, the selfie is analyzed by AI and immediately discarded with zero retention.',
+    auth_btn: '🔐 OPEN MY VAULT',
+    bio_title: 'HOLDER VERIFICATION',
+    bio_desc: 'Take a quick selfie to issue your vault seal. The image is verified by AI and permanently discarded immediately.',
+    bio_tap: '📷 TAP TO CAPTURE YOUR SELFIE',
+    bio_chal: '👁️ EYES OPEN, WELL-LIT FACE, NO SUNGLASSES',
+    bio_btn: '🤳 TAKE SELFIE & SEAL VAULT',
+    bio_skip: 'CONTINUE WITHOUT SEAL FOR NOW →',
+    cap_title: 'ACTIVE CORE',
+    cap_desc: 'Receipts (Domestic or International), invoices, VDO discs, or cargo labels. Snap a photo or batch upload.',
+    ph_nota: 'QUICK NOTE (OPTIONAL)',
+    cap_btn1: '📸 SCAN DOCUMENT',
+    cap_btn2: '⚡ BATCH UPLOAD (MULTIPLE FILES)',
+    cap_vault: '🔐 OPEN MY VAULT',
+    nav_back: '← SCAN',
+    nav_exit: 'EXIT',
+    btn_rev_bio: 'REVOKE PRIVACY SEAL',
+    f_all: 'All',
+    f_today: 'Today',
+    f_7d: '7 Days',
+    f_15d: '15 Days',
+    f_month: 'Month',
+    m_res_pro: 'Business Net Result',
+    m_desp_pes: 'Personal / Home Cash',
+    m_ent_pro: 'Business Income',
+    m_sai_pro: 'Business Expenses',
+    ch_flow: 'Business Cash Flow (Waterfall)',
+    ch_dist: 'Sphere Breakdown',
+    btn_pdf1: '📄 STATEMENT PDF',
+    btn_pdf2: '🛡️ OFFICIAL REPORT',
+    inst_title: 'Institutional Link (Chinese Wall)',
+    ph_convite: 'INVITE CODE (E.G. ZAGHI2026)',
+    inst_opt: 'Allow displaying my operational name during the active window (unchecked shows DRV pseudonym only).',
+    inst_btn: 'CONNECT INSTITUTIONAL KEY',
+    lbl_docs: 'Stored Vouchers',
+    c_in: 'Income',
+    c_out: 'Expenses',
+    c_net: 'Net',
+    c_pro: 'Business',
+    c_pes: 'Personal'
   }
 };
 
@@ -557,9 +657,11 @@ function esc(s) {
 }
 
 function toggleLang() {
-  lang = lang === 'PT' ? 'ES' : 'PT';
+  const idx = LANGS.indexOf(lang);
+  lang = LANGS[(idx + 1) % LANGS.length];
   localStorage.setItem('ignis_lang', lang);
   applyLang();
+  if (dadosCofreCache) aplicarFiltroLocal();
 }
 
 function applyLang() {
@@ -568,8 +670,13 @@ function applyLang() {
     const k = el.getAttribute('data-i18n');
     if (dict[k]) el.textContent = dict[k];
   });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const k = el.getAttribute('data-i18n-ph');
+    if (dict[k]) el.placeholder = dict[k];
+  });
   document.querySelectorAll('.l-pt').forEach(el => el.style.color = lang === 'PT' ? 'var(--amber)' : 'var(--text-secondary)');
   document.querySelectorAll('.l-es').forEach(el => el.style.color = lang === 'ES' ? 'var(--amber)' : 'var(--text-secondary)');
+  document.querySelectorAll('.l-en').forEach(el => el.style.color = lang === 'EN' ? 'var(--amber)' : 'var(--text-secondary)');
 }
 
 function formatarErroServidor(err) {
@@ -629,7 +736,7 @@ function ativarCofre() {
 
   const btn = document.getElementById('btnAuth');
   btn.disabled = true;
-  btn.textContent = '🔐 CONECTANDO AO NÚCLEO...';
+  btn.textContent = '🔐 ...';
   authSt.className = 'status st-load';
   authSt.textContent = 'Autenticando cofre...';
 
@@ -686,7 +793,7 @@ document.getElementById('bioSelfieInput').addEventListener('change', async (e) =
   const bioStatus = document.getElementById('bioStatus');
   btn.disabled = true;
   bioStatus.className = 'status st-load';
-  bioStatus.textContent = '🔍 Validando titularidade (descarte imediato após leitura)...';
+  bioStatus.textContent = '🔍 Validando titularidade...';
 
   try {
     const b64 = await compressImage(f, 640, 0.80);
@@ -787,7 +894,7 @@ function atualizarBadgeFila() {
   if (filaEnvio.length > 0 || processandoFila) {
     const qtd = filaEnvio.length + (processandoFila ? 1 : 0);
     queuePill.style.display = 'block';
-    queuePill.textContent = '⏳ AUDITANDO NO NÚCLEO: ' + qtd + ' NA FILA';
+    queuePill.textContent = '⏳ AUDITANDO / AUDITING: ' + qtd;
   } else {
     queuePill.style.display = 'none';
   }
@@ -802,7 +909,7 @@ async function enfileirarArquivos(fileList) {
   const nota = notaInput.value || '';
   notaInput.value = '';
   statusDiv.className = 'status st-load';
-  statusDiv.textContent = '⚡ Preparando ' + validos.length + ' arquivo(s)...';
+  statusDiv.textContent = '⚡ ... (' + validos.length + ')';
 
   for (let i = 0; i < validos.length; i++) {
     const file = validos[i];
@@ -815,7 +922,7 @@ async function enfileirarArquivos(fileList) {
       processarProximoDaFila();
     } catch (err) {
       statusDiv.className = 'status st-err';
-      statusDiv.textContent = '❌ Erro local: ' + formatarErroServidor(err);
+      statusDiv.textContent = '❌ ' + formatarErroServidor(err);
     }
   }
 }
@@ -857,14 +964,14 @@ function exibirMiniRecibo(rec) {
   ultimoReciboAtivo = rec;
   document.getElementById('miniRecibo').style.display = 'block';
   const isVisual = rec.categoria === 'REGISTRO_GERAL';
-  document.getElementById('mrEsfera').textContent = rec.esfera + ' · ' + (isVisual ? 'LASTRO VISUAL' : rec.categoria);
+  document.getElementById('mrEsfera').textContent = rec.esfera + ' · ' + (isVisual ? 'VISUAL' : rec.categoria);
   document.getElementById('mrValor').textContent = isVisual
     ? 'R$ 0,00'
     : ((rec.isReceita ? '+R$ ' : 'R$ ') + Number(rec.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits:2}));
   document.getElementById('mrDesc').textContent = rec.emissor;
   const btnInv = document.getElementById('btnInverter');
   btnInv.disabled = false;
-  btnInv.textContent = rec.esfera === 'PESSOAL' ? '🔄 MUDAR PARA PROFISSIONAL' : '🔄 MUDAR PARA PESSOAL';
+  btnInv.textContent = rec.esfera === 'PESSOAL' ? '🔄 → PROFISSIONAL / BUSINESS' : '🔄 → PESSOAL / PERSONAL';
 }
 
 function inverterUltimoRecibo() {
@@ -872,7 +979,7 @@ function inverterUltimoRecibo() {
   const sessao = getSessaoCofre();
   const btn = document.getElementById('btnInverter');
   btn.disabled = true;
-  btn.textContent = '⏳ MOVENDO...';
+  btn.textContent = '⏳ ...';
 
   google.script.run
     .withSuccessHandler((res) => {
@@ -880,7 +987,7 @@ function inverterUltimoRecibo() {
       ultimoReciboAtivo.esfera = res.novaEsfera;
       document.getElementById('mrEsfera').textContent = res.novaEsfera + ' · ' + ultimoReciboAtivo.categoria;
       btn.disabled = false;
-      btn.textContent = res.novaEsfera === 'PESSOAL' ? '✅ EM PESSOAL (MUDAR P/ PROFISSIONAL)' : '✅ EM PROFISSIONAL (MUDAR P/ PESSOAL)';
+      btn.textContent = '✅ ' + res.novaEsfera;
     })
     .withFailureHandler((err) => {
       btn.disabled = false;
@@ -902,11 +1009,11 @@ function processarProximoDaFila() {
       concluidosSessao += gravados;
       if (gravados > 0) {
         statusDiv.className = 'status st-ok';
-        statusDiv.textContent = '✅ Auditado (' + (res.tempoSegundos || '?') + 's). Sessão: ' + concluidosSessao;
+        statusDiv.textContent = '✅ OK (' + (res.tempoSegundos || '?') + 's) · Total: ' + concluidosSessao;
         if (res.recibos && res.recibos.length > 0) exibirMiniRecibo(res.recibos[res.recibos.length - 1]);
       } else if (res && res.duplicados > 0) {
         statusDiv.className = 'status st-warn';
-        statusDiv.textContent = '⚠️ Documento já registrado anteriormente.';
+        statusDiv.textContent = '⚠️ Duplicado / Duplicate.';
       }
       atualizarBadgeFila();
       processarProximoDaFila();
@@ -934,7 +1041,7 @@ function processarProximoDaFila() {
 function abrirPainelCofre() {
   const sessao = getSessaoCofre();
   const btn = document.getElementById('btnAbrirCofre');
-  btn.textContent = '⏳ ABRINDO COFRE...';
+  btn.textContent = '⏳ ...';
   btn.disabled = true;
 
   google.script.run
@@ -948,8 +1055,8 @@ function abrirPainelCofre() {
 
       document.getElementById('v-titular').textContent = d.titular;
       document.getElementById('v-indice').textContent = d.indice + ' / 1000';
-      document.getElementById('v-nivel').textContent = d.nivel + ' · NÍVEL DE ORGANIZAÇÃO';
-      document.getElementById('v-bio-badge').textContent = '🛡️ SELO TITULAR: ' + (d.bioHash || 'PENDENTE');
+      document.getElementById('v-nivel').textContent = d.nivel;
+      document.getElementById('v-bio-badge').textContent = '🛡️ ' + (d.bioHash || 'PENDENTE');
 
       aplicarFiltroLocal();
       carregarVinculos();
@@ -979,6 +1086,7 @@ function aplicarFiltroDatas() {
 
 function aplicarFiltroLocal() {
   if (!dadosCofreCache) return;
+  const dict = I18N[lang] || I18N.PT;
   const hoje = new Date();
   const hojeIso = hoje.toISOString().substring(0, 10);
   let dtMin = '';
@@ -1021,11 +1129,11 @@ function aplicarFiltroLocal() {
   document.getElementById('v-desp-pro').textContent = fmt(despPro);
   document.getElementById('v-total-docs').textContent = hist.length;
 
-  renderChartsSvg(recPro, despPro, saldoPro, despPes);
+  renderChartsSvg(recPro, despPro, saldoPro, despPes, dict);
 
   const lista = document.getElementById('v-lista');
   if (hist.length === 0) {
-    lista.innerHTML = '<div style="color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:8px 0;">Nenhum registro neste período.</div>';
+    lista.innerHTML = '<div style="color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:8px 0;">—</div>';
     return;
   }
 
@@ -1035,12 +1143,12 @@ function aplicarFiltroLocal() {
     const valFmt = isZero ? 'R$ 0,00' : ((item.isReceita ? '+R$ ' : '-R$ ') + Number(item.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits:2}));
     const cls = isZero ? 'e-val zero' : (item.isReceita ? 'e-val pos' : 'e-val');
     const linkSafe = (item.link && String(item.link).indexOf('https://') === 0) ? esc(item.link) : '';
-    const linkHtml = linkSafe ? '<a class="e-link" href="' + linkSafe + '" target="_blank" rel="noopener noreferrer">[VER]</a>' : '';
-    const catLabel = isVisual ? 'LASTRO VISUAL' : esc(item.categoria);
+    const linkHtml = linkSafe ? '<a class="e-link" href="' + linkSafe + '" target="_blank" rel="noopener noreferrer">[DOC]</a>' : '';
+    const catLabel = isVisual ? 'VISUAL' : esc(item.categoria);
     const idSafe = esc(item.id);
     const esfSafe = esc(item.esfera);
     const btnInvHtml = '<button class="btn-mini-inv" onclick="inverterItemLista(\'' + idSafe + '\',\'' + esfSafe + '\')">' +
-      (item.esfera === 'PESSOAL' ? '→ Mudar p/ Profissional' : '→ Mudar p/ Pessoal') + '</button>';
+      (item.esfera === 'PESSOAL' ? '→ PRO' : '→ PES') + '</button>';
 
     return '<div class="entry">' +
       '<div>' +
@@ -1061,7 +1169,7 @@ function inverterItemLista(idReg, esferaAtual) {
     .inverterEsferaRegistro(idReg, esferaAtual, sessao.ticket);
 }
 
-function renderChartsSvg(rec, desp, saldo, pes) {
+function renderChartsSvg(rec, desp, saldo, pes, dict) {
   const maxW = Math.max(rec, desp, Math.abs(saldo), 1);
   const wRec = Math.round((rec / maxW) * 140);
   const wDesp = Math.round((desp / maxW) * 140);
@@ -1069,9 +1177,9 @@ function renderChartsSvg(rec, desp, saldo, pes) {
 
   document.getElementById('chartWaterfall').innerHTML =
     '<svg viewBox="0 0 260 95" style="width:100%;height:auto;font-family:monospace;font-size:10px;">' +
-      '<text x="0" y="18" fill="#9a9082">Entradas</text><rect x="65" y="8" width="' + wRec + '" height="13" fill="#22a84e"/><text x="' + (70 + wRec) + '" y="18" fill="#e8e0d0">' + Math.round(rec) + '</text>' +
-      '<text x="0" y="48" fill="#9a9082">Saídas</text><rect x="65" y="38" width="' + wDesp + '" height="13" fill="#c84a4a"/><text x="' + (70 + wDesp) + '" y="48" fill="#e8e0d0">' + Math.round(desp) + '</text>' +
-      '<text x="0" y="78" fill="#9a9082">Líquido</text><rect x="65" y="68" width="' + wSal + '" height="13" fill="#c8860a"/><text x="' + (70 + wSal) + '" y="78" fill="#e8e0d0">' + Math.round(saldo) + '</text>' +
+      '<text x="0" y="18" fill="#9a9082">' + esc(dict.c_in) + '</text><rect x="65" y="8" width="' + wRec + '" height="13" fill="#22a84e"/><text x="' + (70 + wRec) + '" y="18" fill="#e8e0d0">' + Math.round(rec) + '</text>' +
+      '<text x="0" y="48" fill="#9a9082">' + esc(dict.c_out) + '</text><rect x="65" y="38" width="' + wDesp + '" height="13" fill="#c84a4a"/><text x="' + (70 + wDesp) + '" y="48" fill="#e8e0d0">' + Math.round(desp) + '</text>' +
+      '<text x="0" y="78" fill="#9a9082">' + esc(dict.c_net) + '</text><rect x="65" y="68" width="' + wSal + '" height="13" fill="#c8860a"/><text x="' + (70 + wSal) + '" y="78" fill="#e8e0d0">' + Math.round(saldo) + '</text>' +
     '</svg>';
 
   const totalMov = (rec + desp + pes) || 1;
@@ -1083,8 +1191,8 @@ function renderChartsSvg(rec, desp, saldo, pes) {
     '<svg viewBox="0 0 260 95" style="width:100%;height:auto;font-family:monospace;font-size:10px;">' +
       '<circle cx="48" cy="48" r="30" fill="none" stroke="#38bdf8" stroke-width="10"/>' +
       '<circle cx="48" cy="48" r="30" fill="none" stroke="#c8860a" stroke-width="10" stroke-dasharray="' + dash + ' 188" transform="rotate(-90 48 48)"/>' +
-      '<rect x="98" y="26" width="10" height="10" fill="#c8860a"/><text x="114" y="35" fill="#e8e0d0">Profissional: ' + pctPro + '%</text>' +
-      '<rect x="98" y="54" width="10" height="10" fill="#38bdf8"/><text x="114" y="63" fill="#e8e0d0">Pessoal: ' + pctPes + '%</text>' +
+      '<rect x="98" y="26" width="10" height="10" fill="#c8860a"/><text x="114" y="35" fill="#e8e0d0">' + esc(dict.c_pro) + ': ' + pctPro + '%</text>' +
+      '<rect x="98" y="54" width="10" height="10" fill="#38bdf8"/><text x="114" y="63" fill="#e8e0d0">' + esc(dict.c_pes) + ': ' + pctPes + '%</text>' +
     '</svg>';
 }
 
@@ -1097,7 +1205,7 @@ function conectarEmpresa() {
 
   google.script.run
     .withSuccessHandler(res => {
-      alert('Conectado a ' + res.empresa + ' até ' + res.fechamento);
+      alert('OK: ' + res.empresa + ' (' + res.fechamento + ')');
       document.getElementById('inputConviteEmp').value = '';
       carregarVinculos();
     })
@@ -1114,13 +1222,13 @@ function carregarVinculos() {
 
       const box = document.getElementById('listaVinculos');
       if (!lista || lista.length === 0) {
-        box.innerHTML = '<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);">Nenhuma chave empresarial ativa.</div>';
+        box.innerHTML = '<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);">—</div>';
         return;
       }
       box.innerHTML = lista.map(v =>
         '<div class="vinc-row">' +
-          '<div><strong>' + esc(v.empresa) + '</strong> (' + esc(v.status) + ')<br><span style="color:var(--text-secondary);font-size:9px;">Janela: ' + esc(v.abertura) + ' a ' + esc(v.fechamento) + '</span></div>' +
-          (v.status === 'ATIVO' ? '<button class="btn-rev" onclick="encerrarVinculo(\'' + esc(v.vinculoId) + '\')">FECHAR CHAVE</button>' : '') +
+          '<div><strong>' + esc(v.empresa) + '</strong> (' + esc(v.status) + ')<br><span style="color:var(--text-secondary);font-size:9px;">' + esc(v.abertura) + ' → ' + esc(v.fechamento) + '</span></div>' +
+          (v.status === 'ATIVO' ? '<button class="btn-rev" onclick="encerrarVinculo(\'' + esc(v.vinculoId) + '\')">X</button>' : '') +
         '</div>'
       ).join('');
     })
@@ -1129,7 +1237,7 @@ function carregarVinculos() {
 }
 
 function encerrarVinculo(vId) {
-  if (!confirm('Fechar chave imediatamente? A empresa perderá o acesso no mesmo segundo.')) return;
+  if (!confirm('Fechar chave / Close key?')) return;
   const sessao = getSessaoCofre();
   google.script.run
     .withSuccessHandler(() => carregarVinculos())
@@ -1142,7 +1250,7 @@ function gerarPdf(tipoDoc) {
   const btn = tipoDoc === 'CERTIFICADO' ? document.getElementById('btnPdfCert') : document.getElementById('btnPdfExtrato');
   const orig = btn.textContent;
   btn.disabled = true;
-  btn.textContent = '⏳ GERANDO...';
+  btn.textContent = '⏳ ...';
 
   google.script.run
     .withSuccessHandler((res) => {
@@ -1152,9 +1260,9 @@ function gerarPdf(tipoDoc) {
         const barra =
           '<div class="no-print" style="background:#080808;color:#e8e0d0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;border-bottom:2px solid #c8860a;position:sticky;top:0;">' +
           '<span style="color:#c8860a;font-weight:bold;letter-spacing:2px;">I\'GNIS CORE</span>' +
-          '<button onclick="window.print()" style="background:#c8860a;color:#080808;border:none;padding:10px 16px;font-weight:bold;font-family:monospace;cursor:pointer;">🖨️ SALVAR PDF / IMPRIMIR</button>' +
+          '<button onclick="window.print()" style="background:#c8860a;color:#080808;border:none;padding:10px 16px;font-weight:bold;font-family:monospace;cursor:pointer;">🖨️ PRINT / PDF</button>' +
           '</div><style>@media print { .no-print { display:none !important; } body { margin:0; } }</style>';
-        const blob = new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(res.nome || 'Relatorio') + '</title></head><body style="margin:0;">' + barra + res.htmlDoc + '</body></html>'], { type: 'text/html;charset=utf-8' });
+        const blob = new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + esc(res.nome || 'Report') + '</title></head><body style="margin:0;">' + barra + res.htmlDoc + '</body></html>'], { type: 'text/html;charset=utf-8' });
         const blobUrl = URL.createObjectURL(blob);
         window.open(blobUrl, '_blank');
       } else if (res && res.url) {
