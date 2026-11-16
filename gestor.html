@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>I'GNIS CORE v7.3.2 — Torre de Comando Institucional</title>
+  <style>
+    :root {
+      --bg-base: #090b0f;
+      --bg-panel: #11151d;
+      --bg-card: #171d28;
+      --border-subtle: #252e3f;
+      --border-accent: rgba(245, 158, 11, 0.35);
+      --gold: #f59e0b;
+      --gold-hover: #d97706;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --green: #10b981;
+      --green-bg: rgba(16, 185, 129, 0.12);
+      --red: #ef4444;
+      --red-bg: rgba(239, 68, 68, 0.12);
+      --blue: #38bdf8;
+      --blue-bg: rgba(56, 189, 248, 0.12);
+      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .topbar {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand-badge {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .lang-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .session-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill-info {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .btn {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-gold { background: var(--gold); color: #090b0f; }
+    .btn-gold:hover:not(:disabled) { background: var(--gold-hover); }
+    .btn-outline { background: transparent; border-color: var(--border-subtle); color: var(--text-main); }
+    .btn-outline:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+    .btn-danger { background: var(--red-bg); border-color: rgba(239, 68, 68, 0.35); color: var(--red); }
+    .btn-danger:hover:not(:disabled) { background: rgba(239, 68, 68, 0.22); }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+
+    /* LOGIN SCREEN */
+    .login-wrapper {
+      max-width: 440px;
+      margin: 60px auto;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-top: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 32px 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .login-header { margin-bottom: 24px; }
+    .login-header h1 { font-size: 20px; font-weight: 800; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .login-header p { font-size: 13px; color: var(--text-muted); }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      padding: 11px 14px;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--gold); }
+
+    .alert-box {
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .alert-error { background: var(--red-bg); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; }
+    .alert-success { background: var(--green-bg); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; }
+
+    .security-note {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* DASHBOARD VIEW */
+    .hidden { display: none !important; }
+
+    .entity-banner {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .entity-title { font-size: 20px; font-weight: 800; letter-spacing: 0.02em; }
+    .entity-meta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .badge-profile {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-transportadora { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(56, 189, 248, 0.35); }
+    .badge-risco { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px solid var(--border-accent); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .kpi-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .kpi-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .kpi-value { font-size: 24px; font-weight: 800; font-family: var(--font-mono); color: var(--text-main); }
+    .kpi-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* GRÁFICOS SVG EXECUTIVOS (< 3KB) */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+    @media (max-width: 820px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    .chart-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+    .chart-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      margin-bottom: 14px;
+      font-family: var(--font-mono);
+    }
+
+    .section-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      margin-bottom: 26px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+    }
+
+    .filter-input {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 13px;
+      padding: 7px 12px;
+      border-radius: 6px;
+      min-width: 240px;
+      outline: none;
+    }
+    .filter-input:focus { border-color: var(--gold); }
+
+    .table-responsive { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    th {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+    td { padding: 12px 16px; border-bottom: 1px solid rgba(37, 46, 63, 0.6); vertical-align: middle; }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    .mono { font-family: var(--font-mono); }
+
+    .status-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .status-ok { background: var(--green-bg); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-warn { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .status-neutral { background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border-subtle); }
+
+    .empty-state { padding: 36px 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<script>
+// =========================================================================
+// SHIM NATIVO GITHUB PAGES -> APPS SCRIPT API JSON (ZERO IFRAME / ZERO COOKIE)
+// =========================================================================
+const IGNIS_API_URL = "https://script.google.com/macros/s/AKfycbzCtdVqb4l4nOolbv8Aph3Zsx3cqb-lQHP7qrTjdWE6xIYup20EHnH-QRglB_YT-T37EQ/exec";
+
+(function () {
+  if (typeof window.google !== "undefined" && window.google.script && window.google.script.run) return;
+  function runner(ok, fail) {
+    return new Proxy({}, {
+      get: function (_, nome) {
+        if (nome === "withSuccessHandler") return function (f) { return runner(f, fail); };
+        if (nome === "withFailureHandler") return function (f) { return runner(ok, f); };
+        return function () {
+          var args = Array.prototype.slice.call(arguments);
+          fetch(IGNIS_API_URL, {
+            method: "POST",
+            credentials: "omit",
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ fn: nome, args: args })
+          })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (j && j.ok) { if (ok) ok(j.data); }
+            else { if (fail) fail({ message: (j && j.erro) ? j.erro : "Erro no servidor." }); }
+          })
+          .catch(function (e) {
+            if (fail) fail({ message: "Falha de conexao: " + (e && e.message ? e.message : e) });
+          });
+        };
+      }
+    });
+  }
+  window.google = { script: { run: runner(null, null) } };
+})();
+</script>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-badge">I'GNIS CORE v7.3.2</span>
+      <span class="brand-title" id="dashBrandTitle">Torre de Comando Institucional</span>
+      <button type="button" class="lang-btn" onclick="alternarIdiomaDash()">
+        <span id="dPt" style="color:var(--gold);">PT</span> | <span id="dEs">ES</span>
+      </button>
+    </div>
+    <div id="topbarControls" class="session-controls hidden">
+      <span id="topUpdated" class="pill-info">Sincronizado: --</span>
+      <button id="btnRefresh" class="btn btn-outline" onclick="carregarDadosPainel()">Atualizar</button>
+      <button id="btnExportPdf" class="btn btn-gold" onclick="exportarDossiePdf()">Gerar Dossiê PDF</button>
+      <button id="btnLogout" class="btn btn-danger" onclick="encerrarSessao()">Sair</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- TELA DE AUTENTICAÇÃO INSTITUCIONAL -->
+    <section id="loginSection" class="login-wrapper">
+      <div class="login-header">
+        <h1 id="loginTitle">Acesso Gestor Autorizado</h1>
+        <p id="loginDesc">Leitura auditada via Muralha Chinesa e Ledger de Consentimento ativo.</p>
+      </div>
+
+      <div id="loginAlert" class="alert-box alert-error"></div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="inputEntidadeId" id="lblEntId">Identificador da Entidade (Entidade_ID)</label>
+          <input id="inputEntidadeId" class="form-input" type="text" placeholder="Ex: ENT-ZAGHI-001" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputSegredo" id="lblSegredo">Chave Secreta Institucional</label>
+          <input id="inputSegredo" class="form-input" type="password" placeholder="••••••••••••••••" required autocomplete="off">
+        </div>
+
+        <button id="btnLogin" type="submit" class="btn btn-gold" style="width: 100%; justify-content: center; padding: 12px;">
+          Autenticar na Torre
+        </button>
+      </form>
+
+      <div class="security-note">
+        DOMÍNIO SOBERANO • SESSÃO EFÊMERA • LOG DE AUDITORIA SHA-256 ATIVO
+      </div>
+    </section>
+
+    <!-- PAINEL EXECUTIVO DO GESTOR -->
+    <section id="dashboardSection" class="hidden">
+
+      <div id="dashAlert" class="alert-box alert-error"></div>
+
+      <!-- CABEÇALHO DA ENTIDADE -->
+      <div class="entity-banner">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h2 id="entNome" class="entity-title">--</h2>
+            <span id="entPerfilBadge" class="badge-profile badge-transportadora">--</span>
+          </div>
+          <div class="entity-meta">
+            <span>ID: <strong id="entIdDisplay" style="color: var(--text-main);">--</strong></span>
+            <span>Limiar VDO: <strong id="entLimiarVdo" style="color: var(--gold);">-- km/h</strong></span>
+            <span>Visão Ativa: <strong id="entVisaoModo" style="color: var(--text-main);">--</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARDS DE KPI -->
+      <div id="kpiGrid" class="kpi-grid"></div>
+
+      <!-- GRÁFICOS SVG LEVES v7.3.2 (< 3KB) -->
+      <div class="charts-grid">
+        <div class="chart-card" id="cardChartFin">
+          <div class="chart-title" id="titleChartFin">Comparativo Financeiro por Motorista (Receitas vs. Despesas)</div>
+          <div id="svgChartFin"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" id="titleChartVdo">Índice de Condução Defensiva (Telemetria VDO)</div>
+          <div id="svgChartVdo"></div>
+        </div>
+      </div>
+
+      <!-- TABELA 1: VÍNCULOS ATIVOS E CONSOLIDADO POR MOTORISTA -->
+      <div class="section-card">
+        <div class="section-header">
+          <span class="section-title" id="secTitleMot">Vínculos Autorizados & Consolidado por Motorista</span>
+          <input id="filtroMotorista" class="filter-input" type="text" placeholder="Filtrar motorista ou vínculo..." oninput="renderizarTabelas()">
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead id="theadMotoristas"></thead>
+            <tbody id="tbodyMotoristas"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TABELA 2: REGISTROS AUDITADOS NA JANELA DE CONSENTIMENTO -->
+      <div class="section-card">
+        <div class="section-header">
+          <span class="section-title" id="secTitleDoc">Registros Auditados na Janela Consentida</span>
+          <input id="filtroDocumento" class="filter-input" type="text" placeholder="Filtrar placa, categoria, emissor ou motorista..." oninput="renderizarTabelas()">
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead id="theadDocumentos"></thead>
+            <tbody id="tbodyDocumentos"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    var langDash = localStorage.getItem('ignis_lang') || 'PT';
+
+    var estadoPainel = {
+      ticket: null,
+      entidadeId: null,
+      empresa: null,
+      tipoPerfil: null,
+      limiarVdoKmh: 90,
+      atualizado: null,
+      resumo: null,
+      motoristas: [],
+      documentos: []
+    };
+
+    function alternarIdiomaDash() {
+      langDash = langDash === 'PT' ? 'ES' : 'PT';
+      localStorage.setItem('ignis_lang', langDash);
+      aplicarIdiomaDash();
+      if (estadoPainel.ticket && estadoPainel.resumo) {
+        renderizarPainelCompleto();
+      }
+    }
+
+    function aplicarIdiomaDash() {
+      var es = langDash === 'ES';
+      document.getElementById('dPt').style.color = es ? 'var(--text-muted)' : 'var(--gold)';
+      document.getElementById('dEs').style.color = es ? 'var(--gold)' : 'var(--text-muted)';
+      document.getElementById('dashBrandTitle').textContent = es ? 'Torre de Mando Institucional' : 'Torre de Comando Institucional';
+      document.getElementById('loginTitle').textContent = es ? 'Acceso Gestor Autorizado' : 'Acesso Gestor Autorizado';
+      document.getElementById('loginDesc').textContent = es ? 'Lectura auditada vía Muralla China y Ledger de Consentimiento activo.' : 'Leitura auditada via Muralha Chinesa e Ledger de Consentimento ativo.';
+      document.getElementById('lblEntId').textContent = es ? 'Identificador de la Entidad (Entidade_ID)' : 'Identificador da Entidade (Entidade_ID)';
+      document.getElementById('lblSegredo').textContent = es ? 'Clave Secreta Institucional' : 'Chave Secreta Institucional';
+      document.getElementById('btnLogin').textContent = es ? 'Autenticar en la Torre' : 'Autenticar na Torre';
+      document.getElementById('btnRefresh').textContent = es ? 'Actualizar' : 'Atualizar';
+      document.getElementById('btnExportPdf').textContent = es ? 'Generar Dossier PDF' : 'Gerar Dossiê PDF';
+      document.getElementById('btnLogout').textContent = es ? 'Salir' : 'Sair';
+      document.getElementById('titleChartFin').textContent = es ? 'Comparativo Financiero por Conductor (Ingresos vs. Gastos)' : 'Comparativo Financeiro por Motorista (Receitas vs. Despesas)';
+      document.getElementById('titleChartVdo').textContent = es ? 'Índice de Conducción Defensiva (Telemetría VDO)' : 'Índice de Condução Defensiva (Telemetria VDO)';
+      document.getElementById('secTitleMot').textContent = es ? 'Vínculos Autorizados y Consolidado por Conductor' : 'Vínculos Autorizados & Consolidado por Motorista';
+      document.getElementById('secTitleDoc').textContent = es ? 'Registros Auditados en la Ventana Consentida' : 'Registros Auditados na Janela Consentida';
+    }
+
+    function escapeHtml(valor) {
+      if (valor === null || valor === undefined) return '';
+      return String(valor)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatarBRL(num) {
+      var n = Number(num);
+      if (isNaN(n)) n = 0;
+      return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function formatarNumero(num, casas) {
+      var n = Number(num);
+      if (isNaN(n)) return '0';
+      return n.toLocaleString('pt-BR', {
+        minimumFractionDigits: casas || 0,
+        maximumFractionDigits: casas || 0
+      });
+    }
+
+    function isPerfilRisco(tipoPerfil) {
+      var p = String(tipoPerfil || '').toUpperCase();
+      return p === 'GERENCIADORA_RISCO' || p === 'PLATAFORMA';
+    }
+
+    function mostrarAlerta(idElemento, mensagem) {
+      var el = document.getElementById(idElemento);
+      if (!el) return;
+      if (!mensagem) {
+        el.style.display = 'none';
+        el.textContent = '';
+        return;
+      }
+      el.textContent = String(mensagem);
+      el.style.display = 'block';
+    }
+
+    function tratarErroGestor(err, fallbackId) {
+      var msg = err && err.message ? String(err.message) : String(err || '');
+      if (/SESSAO_GESTOR_EXPIRADA/.test(msg)) {
+        encerrarSessao();
+        mostrarAlerta('loginAlert', msg);
+        return;
+      }
+      mostrarAlerta(fallbackId || 'dashAlert', msg);
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      mostrarAlerta('loginAlert', '');
+
+      var entidadeId = document.getElementById('inputEntidadeId').value.trim();
+      var segredo = document.getElementById('inputSegredo').value;
+
+      if (!entidadeId || !segredo) {
+        mostrarAlerta('loginAlert', langDash === 'ES' ? 'Informe el Identificador y la Clave Secreta.' : 'Informe o Identificador da Entidade e a Chave Secreta.');
+        return;
+      }
+
+      var btn = document.getElementById('btnLogin');
+      btn.disabled = true;
+      btn.textContent = langDash === 'ES' ? 'Validando Credenciales...' : 'Validando Credenciais...';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false;
+          aplicarIdiomaDash();
+
+          if (!res || !res.sucesso || !res.ticket) {
+            mostrarAlerta('loginAlert', 'Credenciais institucionais recusadas.');
+            return;
+          }
+
+          estadoPainel.ticket = res.ticket;
+          estadoPainel.entidadeId = res.entidadeId || entidadeId;
+          estadoPainel.empresa = res.empresa || entidadeId;
+          estadoPainel.tipoPerfil = res.tipoPerfil || 'TRANSPORTADORA';
+
+          document.getElementById('inputSegredo').value = '';
+          document.getElementById('loginSection').classList.add('hidden');
+          document.getElementById('dashboardSection').classList.remove('hidden');
+          document.getElementById('topbarControls').classList.remove('hidden');
+
+          carregarDadosPainel();
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          aplicarIdiomaDash();
+          tratarErroGestor(err, 'loginAlert');
+        })
+        .autenticarGestorEntidade(entidadeId, segredo);
+    }
+
+    function carregarDadosPainel() {
+      if (!estadoPainel.ticket) return;
+      mostrarAlerta('dashAlert', '');
+
+      var btnRefresh = document.getElementById('btnRefresh');
+      btnRefresh.disabled = true;
+      btnRefresh.textContent = langDash === 'ES' ? 'Sincronizando...' : 'Sincronizando...';
+
+      google.script.run
+        .withSuccessHandler(function(dados) {
+          btnRefresh.disabled = false;
+          aplicarIdiomaDash();
+
+          if (!dados || !dados.ok) {
+            mostrarAlerta('dashAlert', 'Sessão expirada ou acesso negado pela Muralha Chinesa.');
+            return;
+          }
+
+          estadoPainel.entidadeId = dados.entidadeId || estadoPainel.entidadeId;
+          estadoPainel.empresa = dados.empresa || estadoPainel.empresa;
+          estadoPainel.tipoPerfil = dados.tipoPerfil || estadoPainel.tipoPerfil;
+          estadoPainel.limiarVdoKmh = Number(dados.limiarVdoKmh) || 90;
+          estadoPainel.atualizado = dados.atualizado || new Date().toLocaleString('pt-BR');
+          estadoPainel.resumo = dados.resumo || {};
+          estadoPainel.motoristas = Array.isArray(dados.motoristas) ? dados.motoristas : [];
+          estadoPainel.documentos = Array.isArray(dados.documentos) ? dados.documentos : [];
+
+          renderizarPainelCompleto();
+        })
+        .withFailureHandler(function(err) {
+          btnRefresh.disabled = false;
+          aplicarIdiomaDash();
+          tratarErroGestor(err, 'dashAlert');
+        })
+        .carregarPainelGestor(estadoPainel.ticket);
+    }
+
+    function renderizarPainelCompleto() {
+      var riscoMode = isPerfilRisco(estadoPainel.tipoPerfil);
+      var es = langDash === 'ES';
+
+      document.getElementById('topUpdated').textContent = 'Sincronizado: ' + escapeHtml(estadoPainel.atualizado);
+      document.getElementById('entNome').textContent = estadoPainel.empresa || '--';
+      document.getElementById('entIdDisplay').textContent = estadoPainel.entidadeId || '--';
+      document.getElementById('entLimiarVdo').textContent = estadoPainel.limiarVdoKmh + ' km/h';
+
+      var badge = document.getElementById('entPerfilBadge');
+      badge.textContent = estadoPainel.tipoPerfil || 'TRANSPORTADORA';
+      badge.className = 'badge-profile ' + (riscoMode ? 'badge-risco' : 'badge-transportadora');
+
+      document.getElementById('entVisaoModo').textContent = riscoMode
+        ? (es ? 'Telemetría VDO y Conformidad de Riesgo (Sin valores financieros)' : 'Telemetria VDO & Conformidade de Risco (Sem valores financeiros)')
+        : (es ? 'Operacional Completo (Flota, Financiero Mercosur/BRL y VDO)' : 'Operacional Completo (Frota, Financeiro Mercosul/BRL & VDO)');
+
+      renderizarKpis(riscoMode);
+      renderizarGraficosSvg(riscoMode);
+      renderizarTabelas();
+    }
+
+    function renderizarGraficosSvg(riscoMode) {
+      var es = langDash === 'ES';
+      var r = estadoPainel.resumo || {};
+      var mots = estadoPainel.motoristas || [];
+
+      var pctVdo = Math.max(0, Math.min(100, Number(r.vdoTaxaDefensivaPct !== undefined ? r.vdoTaxaDefensivaPct : 100)));
+      var totalDiscos = Number(r.vdoDiscosTotal || 0);
+      var circ = 2 * Math.PI * 38;
+      var dash = Math.round((pctVdo / 100) * circ);
+      var corVdo = pctVdo >= 85 ? '#10b981' : (pctVdo >= 60 ? '#f59e0b' : '#ef4444');
+
+      document.getElementById('svgChartVdo').innerHTML =
+        '<svg viewBox="0 0 320 110" style="width:100%;height:auto;font-family:monospace;">' +
+          '<circle cx="58" cy="55" r="38" fill="none" stroke="#252e3f" stroke-width="10"/>' +
+          '<circle cx="58" cy="55" r="38" fill="none" stroke="' + corVdo + '" stroke-width="10" stroke-linecap="round" stroke-dasharray="' + dash + ' ' + Math.round(circ) + '" transform="rotate(-90 58 55)"/>' +
+          '<text x="58" y="60" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="bold">' + Math.round(pctVdo) + '%</text>' +
+          '<text x="118" y="34" fill="#f1f5f9" font-size="11" font-weight="bold">Discos Auditados: ' + totalDiscos + '</text>' +
+          '<text x="118" y="54" fill="#94a3b8" font-size="10">' + (es ? 'Límite VDO: ' : 'Limiar VDO: ') + estadoPainel.limiarVdoKmh + ' km/h</text>' +
+          '<text x="118" y="74" fill="' + corVdo + '" font-size="10" font-weight="bold">' + (pctVdo >= 85 ? (es ? 'CONFORMIDAD ALTA' : 'CONFORMIDADE ALTA') : (es ? 'ATENCIÓN OPERATIVA' : 'ATENÇÃO OPERACIONAL')) + '</text>' +
+        '</svg>';
+
+      var cardFin = document.getElementById('cardChartFin');
+      if (riscoMode) {
+        cardFin.classList.add('hidden');
+        return;
+      }
+      cardFin.classList.remove('hidden');
+
+      if (mots.length === 0) {
+        document.getElementById('svgChartFin').innerHTML =
+          '<div style="color:var(--text-muted);font-family:var(--font-mono);font-size:11px;padding:24px 0;">' +
+          (es ? 'Sin vínculos activos para gráfico.' : 'Aguardando vínculos ativos para exibir comparativo.') + '</div>';
+        return;
+      }
+
+      var topMots = mots.slice(0, 4);
+      var maxVal = 1;
+      for (var i = 0; i < topMots.length; i++) {
+        maxVal = Math.max(maxVal, Number(topMots[i].receitasBRL || 0), Number(topMots[i].despesasBRL || 0));
+      }
+
+      var altura = Math.max(110, topMots.length * 36 + 24);
+      var barras = '';
+      for (var j = 0; j < topMots.length; j++) {
+        var m = topMots[j];
+        var y = 24 + j * 36;
+        var rec = Number(m.receitasBRL || 0);
+        var desp = Number(m.despesasBRL || 0);
+        var wRec = Math.round((rec / maxVal) * 180);
+        var wDesp = Math.round((desp / maxVal) * 180);
+        var nomeCurto = escapeHtml(String(m.identificacao || 'DRV').substring(0, 14));
+
+        barras +=
+          '<text x="0" y="' + (y + 10) + '" fill="#f1f5f9" font-size="10">' + nomeCurto + '</text>' +
+          '<rect x="115" y="' + y + '" width="' + wRec + '" height="8" fill="#10b981" rx="2"/>' +
+          '<text x="' + (120 + wRec) + '" y="' + (y + 8) + '" fill="#10b981" font-size="9">R$ ' + Math.round(rec) + '</text>' +
+          '<rect x="115" y="' + (y + 11) + '" width="' + wDesp + '" height="8" fill="#ef4444" rx="2"/>' +
+          '<text x="' + (120 + wDesp) + '" y="' + (y + 19) + '" fill="#ef4444" font-size="9">R$ ' + Math.round(desp) + '</text>';
+      }
+
+      document.getElementById('svgChartFin').innerHTML =
+        '<svg viewBox="0 0 380 ' + altura + '" style="width:100%;height:auto;font-family:monospace;">' +
+          '<rect x="115" y="4" width="8" height="8" fill="#10b981"/><text x="127" y="12" fill="#94a3b8" font-size="9">' + (es ? 'Ingresos' : 'Receitas') + '</text>' +
+          '<rect x="195" y="4" width="8" height="8" fill="#ef4444"/><text x="207" y="12" fill="#94a3b8" font-size="9">' + (es ? 'Gastos' : 'Despesas') + '</text>' +
+          barras +
+        '</svg>';
+    }
+
+    function renderizarKpis(riscoMode) {
+      var r = estadoPainel.resumo || {};
+      var es = langDash === 'ES';
+      var cards = [
+        {
+          label: es ? 'Conductores Vinculados' : 'Motoristas Vinculados',
+          value: formatarNumero(r.motoristasAtivos || 0, 0),
+          sub: es ? 'Llaves activas bajo consentimiento' : 'Chaves ativas sob consentimento'
+        },
+        {
+          label: es ? 'Documentos en Ventana' : 'Documentos na Janela',
+          value: formatarNumero(r.documentosJanela || 0, 0),
+          sub: es ? 'Registros auditados en el período' : 'Registros auditados no período'
+        },
+        {
+          label: es ? 'Discos VDO Auditados' : 'Discos VDO Auditados',
+          value: formatarNumero(r.vdoDiscosTotal || 0, 0),
+          sub: (es ? 'Límite configurado: ' : 'Limiar configurado: ') + estadoPainel.limiarVdoKmh + ' km/h'
+        },
+        {
+          label: es ? 'Conducción Defensiva VDO' : 'Condução Defensiva VDO',
+          value: formatarNumero(r.vdoTaxaDefensivaPct || 0, 1) + '%',
+          sub: es ? 'Discos dentro del límite operativo' : 'Discos dentro do limite operacional'
+        }
+      ];
+
+      if (!riscoMode) {
+        cards.push({
+          label: es ? 'Gastos Operativos' : 'Despesas Operacionais',
+          value: formatarBRL(r.despesasOperacionaisBRL || 0),
+          sub: es ? 'Convertido vía CAMBIO_DIARIO' : 'Convertido via CAMBIO_DIARIO'
+        });
+        cards.push({
+          label: es ? 'Ingresos / Fletes' : 'Receitas / Fretes',
+          value: formatarBRL(r.receitasOperacionaisBRL || 0),
+          sub: es ? 'Comprobantes en ventana activa' : 'Comprovantes na janela ativa'
+        });
+      }
+
+      var html = '';
+      for (var i = 0; i < cards.length; i++) {
+        var c = cards[i];
+        html += '<div class="kpi-card">' +
+          '<div class="kpi-label">' + escapeHtml(c.label) + '</div>' +
+          '<div class="kpi-value">' + escapeHtml(c.value) + '</div>' +
+          '<div class="kpi-sub">' + escapeHtml(c.sub) + '</div>' +
+        '</div>';
+      }
+      document.getElementById('kpiGrid').innerHTML = html;
+    }
+
+    function renderizarTabelas() {
+      var riscoMode = isPerfilRisco(estadoPainel.tipoPerfil);
+      var limiar = estadoPainel.limiarVdoKmh;
+      var es = langDash === 'ES';
+
+      var theadMot = '<tr>' +
+        '<th>' + (es ? 'Conductor / Seudónimo' : 'Motorista / Pseudônimo') + '</th>' +
+        '<th>Vínculo ID</th>' +
+        '<th>' + (es ? 'Ventana Autorizada' : 'Janela Autorizada') + '</th>' +
+        '<th>Docs</th>' +
+        '<th>Discos VDO</th>' +
+        '<th>' + (es ? 'Tasa Defensiva' : 'Taxa Defensiva') + '</th>' +
+        '<th>Vel. Máx.</th>';
+
+      if (!riscoMode) {
+        theadMot += '<th>' + (es ? 'Gastos (BRL)' : 'Despesas (BRL)') + '</th><th>' + (es ? 'Ingresos (BRL)' : 'Receitas (BRL)') + '</th>';
+      }
+      theadMot += '</tr>';
+      document.getElementById('theadMotoristas').innerHTML = theadMot;
+
+      var termoMot = (document.getElementById('filtroMotorista').value || '').toLowerCase().trim();
+      var motFiltrados = estadoPainel.motoristas.filter(function(m) {
+        if (!termoMot) return true;
+        var alvo = (String(m.identificacao || '') + ' ' + String(m.vinculoId || '')).toLowerCase();
+        return alvo.indexOf(termoMot) !== -1;
+      });
+
+      var colsMot = riscoMode ? 7 : 9;
+      if (motFiltrados.length === 0) {
+        document.getElementById('tbodyMotoristas').innerHTML =
+          '<tr><td colspan="' + colsMot + '" class="empty-state">' + (es ? 'Ningún conductor activo encontrado.' : 'Nenhum motorista ativo ou registro encontrado para o filtro atual.') + '</td></tr>';
+      } else {
+        var rowsMot = '';
+        for (var i = 0; i < motFiltrados.length; i++) {
+          var m = motFiltrados[i];
+          var velMax = Number(m.velMaxRegistrada) || 0;
+          var excedeu = velMax > limiar;
+          var badgeVel = velMax > 0
+            ? '<span class="status-pill ' + (excedeu ? 'status-warn' : 'status-ok') + '">' + escapeHtml(velMax) + ' km/h</span>'
+            : '<span class="status-pill status-neutral">Sem VDO</span>';
+
+          rowsMot += '<tr>' +
+            '<td><strong>' + escapeHtml(m.identificacao || 'Motorista') + '</strong></td>' +
+            '<td class="mono">' + escapeHtml(m.vinculoId || '--') + '</td>' +
+            '<td class="mono">' + escapeHtml(m.janela || '--') + '</td>' +
+            '<td class="mono">' + escapeHtml(m.qtdDocs || 0) + '</td>' +
+            '<td class="mono">' + escapeHtml(m.vdoDefensivos || 0) + ' / ' + escapeHtml(m.vdoDiscos || 0) + '</td>' +
+            '<td class="mono">' + escapeHtml(formatarNumero(m.taxaDefensivaPct || 0, 1)) + '%</td>' +
+            '<td>' + badgeVel + '</td>';
+
+          if (!riscoMode) {
+            rowsMot += '<td class="mono">' + escapeHtml(formatarBRL(m.despesasBRL || 0)) + '</td>' +
+                       '<td class="mono">' + escapeHtml(formatarBRL(m.receitasBRL || 0)) + '</td>';
+          }
+          rowsMot += '</tr>';
+        }
+        document.getElementById('tbodyMotoristas').innerHTML = rowsMot;
+      }
+
+      var theadDoc = '<tr>' +
+        '<th>' + (es ? 'Fecha' : 'Data') + '</th>' +
+        '<th>' + (es ? 'Conductor' : 'Motorista') + '</th>' +
+        '<th>' + (es ? 'Categoría' : 'Categoria') + '</th>' +
+        '<th>Emissor / Local</th>' +
+        '<th>Placa</th>' +
+        '<th>Vel. Máx. VDO</th>';
+
+      if (!riscoMode) {
+        theadDoc += '<th>Valor Original</th><th>Valor (BRL)</th>';
+      }
+      theadDoc += '</tr>';
+      document.getElementById('theadDocumentos').innerHTML = theadDoc;
+
+      var termoDoc = (document.getElementById('filtroDocumento').value || '').toLowerCase().trim();
+      var docFiltrados = estadoPainel.documentos.filter(function(d) {
+        if (!termoDoc) return true;
+        var alvo = (
+          String(d.motorista || '') + ' ' +
+          String(d.categoria || '') + ' ' +
+          String(d.emissor || '') + ' ' +
+          String(d.placa || '') + ' ' +
+          String(d.data || '')
+        ).toLowerCase();
+        return alvo.indexOf(termoDoc) !== -1;
+      });
+
+      var colsDoc = riscoMode ? 6 : 8;
+      if (docFiltrados.length === 0) {
+        document.getElementById('tbodyDocumentos').innerHTML =
+          '<tr><td colspan="' + colsDoc + '" class="empty-state">' + (es ? 'Ningún documento auditado disponible.' : 'Nenhum documento auditado disponível nesta janela de consentimento.') + '</td></tr>';
+      } else {
+        var rowsDoc = '';
+        for (var j = 0; j < docFiltrados.length; j++) {
+          var d = docFiltrados[j];
+          var dVel = Number(d.velMax) || 0;
+          var dExcedeu = dVel > limiar;
+          var dBadgeVel = dVel > 0
+            ? '<span class="status-pill ' + (dExcedeu ? 'status-warn' : 'status-ok') + '">' + escapeHtml(dVel) + ' km/h</span>'
+            : '<span class="status-pill status-neutral">--</span>';
+
+          rowsDoc += '<tr>' +
+            '<td class="mono">' + escapeHtml(d.data || '--') + '</td>' +
+            '<td>' + escapeHtml(d.motorista || '--') + '</td>' +
+            '<td><span class="status-pill status-neutral">' + escapeHtml(d.categoria || '--') + '</span></td>' +
+            '<td>' + escapeHtml(d.emissor || '--') + '</td>' +
+            '<td class="mono">' + escapeHtml(d.placa || '--') + '</td>' +
+            '<td>' + dBadgeVel + '</td>';
+
+          if (!riscoMode) {
+            var moeda = escapeHtml(d.moeda || 'BRL');
+            var valOrig = formatarNumero(d.valorOriginal || 0, 2);
+            rowsDoc += '<td class="mono">' + moeda + ' ' + escapeHtml(valOrig) + '</td>' +
+                       '<td class="mono">' + escapeHtml(formatarBRL(d.valorBRL || 0)) + '</td>';
+          }
+          rowsDoc += '</tr>';
+        }
+        document.getElementById('tbodyDocumentos').innerHTML = rowsDoc;
+      }
+    }
+
+    function exportarDossiePdf() {
+      if (!estadoPainel.ticket) return;
+      mostrarAlerta('dashAlert', '');
+
+      var btn = document.getElementById('btnExportPdf');
+      btn.disabled = true;
+      btn.textContent = langDash === 'ES' ? 'Generando PDF...' : 'Gerando PDF...';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false;
+          aplicarIdiomaDash();
+
+          if (res && res.htmlDoc) {
+            var barra =
+              '<div class="no-print" style="background:#080808;color:#e8e0d0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;border-bottom:2px solid #c8860a;position:sticky;top:0;">' +
+              '<span style="color:#c8860a;font-weight:bold;letter-spacing:2px;">I\'GNIS CORE</span>' +
+              '<button onclick="window.print()" style="background:#c8860a;color:#080808;border:none;padding:10px 16px;font-weight:bold;font-family:monospace;cursor:pointer;">🖨️ SALVAR PDF / IMPRIMIR</button>' +
+              '</div><style>@media print { .no-print { display:none !important; } body { margin:0; } }</style>';
+            var blob = new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + escapeHtml(res.nome || 'Dossie') + '</title></head><body style="margin:0;">' + barra + res.htmlDoc + '</body></html>'], { type: 'text/html;charset=utf-8' });
+            var blobUrl = URL.createObjectURL(blob);
+            window.open(blobUrl, '_blank');
+          } else if (res && res.url) {
+            window.open(res.url, '_blank');
+          } else {
+            mostrarAlerta('dashAlert', 'Não foi possível gerar o Dossiê PDF.');
+          }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          aplicarIdiomaDash();
+          tratarErroGestor(err, 'dashAlert');
+        })
+        .gerarDossiePdfGestor(estadoPainel.ticket);
+    }
+
+    function encerrarSessao() {
+      estadoPainel = {
+        ticket: null,
+        entidadeId: null,
+        empresa: null,
+        tipoPerfil: null,
+        limiarVdoKmh: 90,
+        atualizado: null,
+        resumo: null,
+        motoristas: [],
+        documentos: []
+      };
+
+      document.getElementById('kpiGrid').innerHTML = '';
+      document.getElementById('svgChartFin').innerHTML = '';
+      document.getElementById('svgChartVdo').innerHTML = '';
+      document.getElementById('tbodyMotoristas').innerHTML = '';
+      document.getElementById('tbodyDocumentos').innerHTML = '';
+      document.getElementById('dashboardSection').classList.add('hidden');
+      document.getElementById('topbarControls').classList.add('hidden');
+      document.getElementById('loginSection').classList.remove('hidden');
+      mostrarAlerta('loginAlert', '');
+      mostrarAlerta('dashAlert', '');
+    }
+
+    aplicarIdiomaDash();
+  </script>
+</body>
+</html>
